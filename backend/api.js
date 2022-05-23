@@ -21,12 +21,12 @@ expressApp.get('/health', function(req, res) {
 // Teams
 expressApp.get('/teams', function(req, res) {
     request('https://statsapi.web.nhl.com/api/v1/teams', function (error, response, body) {
-      if (!error && response.statusCode == 200) {
-        logger.info(body);
-        res.json(body);
-      }else{
-        logger.info('Error retrieving teams %d', error)
-      }
+        if (!error && response.statusCode === 200) {
+            logger.info(body);
+            res.json(body);
+        } else {
+            res.json({err: error, response: response, body: body});
+        }
     });
 });
 
