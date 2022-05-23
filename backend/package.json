@@ -1,0 +1,29 @@
+{
+  "name": "barn-burner",
+  "version": "1.0.0",
+  "description": "NHL Stats",
+  "main": "app.js",
+  "scripts": {
+    "lint": "eslint --ext .js,.jsx .",
+    "lint-fix": "eslint --fix --ext .js,.jsx .",
+    "tests": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/barn-burner/barn-burner.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/barn-burner/barn-burner/issues"
+  },
+  "homepage": "https://github.com/barn-burner/barn-burner#readme",
+  "dependencies": {
+    "bunyan": "^1.8.15",
+    "eslint": "^8.16.0",
+    "express": "^4.18.1"
+  },
+  "devDependencies": {
+    "mocha": "^10.0.0"
+  }
+}
