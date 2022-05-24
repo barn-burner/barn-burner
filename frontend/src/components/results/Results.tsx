@@ -24,10 +24,12 @@ const Results: React.FC<ResultsProps> = ({ className, team1, team2, ...props }) 
         Results
       </Grid>
       <Grid item xs={6}>
-        {team1}
+        {team1} logo
+        {team1} name
       </Grid>
       <Grid item xs={6}>
-        {team2}
+        {team2} logo
+        {team2} name
       </Grid>
     </Grid>
   );
