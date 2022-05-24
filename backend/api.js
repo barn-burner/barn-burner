@@ -30,7 +30,7 @@ expressApp.get('/teams', function (req, res) {
         function (error, response, body) {
             if (!error && response.statusCode === 200) {
                 logger.info(body);
-                res.json(body);
+                res.json(JSON.parse(body.toString()));
             } else {
                 res.json({ err: error, response: response, body: body });
             }
