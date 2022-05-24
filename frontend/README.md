@@ -36,7 +36,6 @@ Builds the app in production mode and serves it.
 
 Open [http://localhost:5000](http://localhost:5000) to view it in the browser.
 
-
 ---
 
 ### Testing
