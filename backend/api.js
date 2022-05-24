@@ -40,12 +40,29 @@ expressApp.get('/teams', function (req, res) {
 });
 
 // Get Team logos
-expressApp.get('/team/logo/:teamid', function(req, res) {
-    res.json({url: constructTeamURL(req.params.teamid)});
+expressApp.get('/team/logo/:teamid', function (req, res) {
+    res.json({ url: constructTeamURL(req.params.teamid) });
 });
 
 function constructTeamURL(teamid) {
     return logoURL + teamid + '.svg';
+}
+
+// Get info about a team given an ID
+expressApp.get('/team/:teamid', async (req, res) => {
+    let teamInfo = await getTeamInfo(req.params.teamid);
+    res.json(teamInfo);
+})
+
+async function getTeamInfo(teamid) {
+    let response = (await axios.get(`${baseURL}/teams/${teamid}`)).data.teams[0];
+    let teamInfo = {
+        "name": response.name,
+        "abbreviation": response.abbreviation,
+        "teamName": response.teamName,
+        "locationName": response.locationName,
+    }
+    return teamInfo;
 }
 
 // =============
@@ -66,6 +83,7 @@ expressApp.get('/h2h/:one-:two', async (req, res) => {
     res.json(matchupStats);
 });
 
+// Returns a win / loss object for a given two team matchup
 function getMatchupStats(matchups, idOne, idTwo) {
     let ratio = {
         [idOne]: {
