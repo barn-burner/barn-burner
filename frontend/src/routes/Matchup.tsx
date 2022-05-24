@@ -7,7 +7,7 @@ const Matchup: React.FC = () => {
 
   return (
     <>
-      <Results team1={1} team2={2}/>
+      <Results/>
       <GameList/>
     </>
   );

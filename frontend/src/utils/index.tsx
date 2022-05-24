@@ -9,3 +9,10 @@ export const calculateAverage = (input: number[]):number => {
   const avgRounded = (Math.round(avg * 10) / 10);
   return avgRounded;
 };
+
+export const useQuery = (input: string): string => {
+  const queryString = window.location.search;
+  const params = new URLSearchParams(queryString);
+  const q = params.get(input);
+  return q || 'invalid';
+}
