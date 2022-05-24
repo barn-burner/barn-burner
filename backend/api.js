@@ -51,13 +51,64 @@ expressApp.get('/h2h/:one-:two', async (req, res) => {
     let sharedSchedule = await getCompareSchedules(teamOne, teamTwo, start, end);
     let matchups = getScheduleMatchups(sharedSchedule, teamOne, teamTwo);
 
-    res.json(matchups);
+    let matchupStats = getMatchupStats(matchups, teamOne, teamTwo);
+
+    res.json(matchupStats);
 });
+
+function getMatchupStats(matchups, idOne, idTwo) {
+    let ratio = {
+        [idOne]: {
+            "overall": {
+                "wins": 0, "losses": 0,
+            },
+            "home": {
+                "wins": 0, "losses": 0,
+            },
+            "away": {
+                "wins": 0, "losses": 0,
+            }
+        },
+        [idTwo]: {
+            "overall": {
+                "wins": 0, "losses": 0,
+            },
+            "home": {
+                "wins": 0, "losses": 0,
+            },
+            "away": {
+                "wins": 0, "losses": 0,
+            }
+        }
+    };
+    matchups.map((match) => {
+        let homeTeam = match.teams.home;
+        let awayTeam = match.teams.away;
+        if (homeTeam.score > awayTeam.score) {
+            // home team wins, away team loses
+            ratio[homeTeam.team.id].home.wins++;
+            ratio[awayTeam.team.id].away.losses++;
+        } else {
+            // away team wins, home team loses
+            ratio[awayTeam.team.id].away.wins++;
+            ratio[homeTeam.team.id].home.losses++;
+        }
+
+        // Overall = home + away wins and losses
+        ratio[idOne].overall.wins = ratio[idOne].home.wins + ratio[idOne].away.wins;
+        ratio[idOne].overall.losses = ratio[idOne].home.losses + ratio[idOne].away.losses;
+
+        // The second team is the inverse of the first
+        ratio[idTwo].overall.wins = ratio[idOne].overall.losses;
+        ratio[idTwo].overall.losses = ratio[idOne].overall.wins;
+    })
+    return ratio
+}
 
 async function getCompareSchedules(teamOne, teamTwo, start, end) {
     const sharedSchedule = (
         await axios.get(
-            `${baseURL}/schedule?teamId=${teamOne},${teamTwo}&startDate=${start}&endDate=${end}&expand=schedule.linescore&gameType=R,P`
+            `${baseURL}/schedule?teamId=${teamOne},${teamTwo}&startDate=${start}&endDate=${end}&gameType=R,P`
         )
     ).data;
     return sharedSchedule;
