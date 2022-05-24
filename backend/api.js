@@ -42,8 +42,8 @@ expressApp.get('/teams', function (req, res) {
 expressApp.get('/h2h/:one-:two', async (req, res) => {
     let teamOne = (+req.params.one);
     let teamTwo = (+req.params.two);
-    let start = (req.query.start !== null) ? req.query.start : seasonStart;
-    let end = (req.query.end !== null) ? req.query.end : seasonEnd;
+    let start = (req.query.start != null) ? req.query.start : seasonStart;
+    let end = (req.query.end != null) ? req.query.end : seasonEnd;
     let sharedSchedule = await getCompareSchedules(teamOne, teamTwo, start, end);
     let matchups = getScheduleMatchups(sharedSchedule, teamOne, teamTwo);
 
