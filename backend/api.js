@@ -10,6 +10,8 @@ const expressApp = express();
 let server;
 
 const baseURL = 'https://statsapi.web.nhl.com/api/v1';
+const seasonStart = "2021-10-12";
+const seasonEnd = "2022-06-01";
 
 // TODO: Should these endpoints grow too large
 // They will need to be broken into individual controllers
@@ -24,7 +26,7 @@ expressApp.get('/health', function (req, res) {
 // Teams
 expressApp.get('/teams', function (req, res) {
     request(
-        'https://statsapi.web.nhl.com/api/v1/teams',
+        `${baseURL}/teams`,
         function (error, response, body) {
             if (!error && response.statusCode === 200) {
                 logger.info(body);
@@ -40,16 +42,18 @@ expressApp.get('/teams', function (req, res) {
 expressApp.get('/h2h/:one-:two', async (req, res) => {
     let teamOne = (+req.params.one);
     let teamTwo = (+req.params.two);
-    let sharedSchedule = await getCompareSchedules(teamOne, teamTwo);
+    let start = (req.query.start != null) ? req.query.start : seasonStart;
+    let end = (req.query.end != null) ? req.query.end : seasonEnd;
+    let sharedSchedule = await getCompareSchedules(teamOne, teamTwo, start, end);
     let matchups = getScheduleMatchups(sharedSchedule, teamOne, teamTwo);
 
     res.json(matchups);
 });
 
-async function getCompareSchedules(teamOne, teamTwo) {
+async function getCompareSchedules(teamOne, teamTwo, start, end) {
     const sharedSchedule = (
         await axios.get(
-            `${baseURL}/schedule?teamId=${teamOne},${teamTwo}&season=20212022&expand=schedule.linescore&gameType=R,P`
+            `${baseURL}/schedule?teamId=${teamOne},${teamTwo}&startDate=${start}&endDate=${end}&expand=schedule.linescore&gameType=R,P`
         )
     ).data;
     return sharedSchedule;
