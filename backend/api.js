@@ -10,6 +10,7 @@ const expressApp = express();
 let server;
 
 const baseURL = 'https://statsapi.web.nhl.com/api/v1';
+const logoURL = 'https://www-league.nhlstatic.com/images/logos/teams-current-primary-light/';
 const seasonStart = '2021-10-12';
 const seasonEnd = '2022-06-01';
 
@@ -37,6 +38,15 @@ expressApp.get('/teams', function (req, res) {
         }
     );
 });
+
+// Get Team logos
+expressApp.get('/team/logo/:teamid', function(req, res) {
+    res.json({url: constructTeamURL(req.params.teamid)});
+});
+
+function constructTeamURL(teamid) {
+    return logoURL + teamid + '.svg';
+}
 
 // =============
 // Head to Head
