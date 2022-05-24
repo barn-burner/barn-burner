@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/barn-burner/barn-burner#readme",
   "dependencies": {
+    "axios": "^0.27.2",
     "bunyan": "^1.8.15",
     "eslint": "^8.16.0",
     "express": "^4.18.1",
