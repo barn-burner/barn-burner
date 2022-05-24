@@ -2,6 +2,7 @@
   "name": "barn-burner",
   "version": "0.0.1",
   "dependencies": {
+    "@patternfly/react-core": "^4.214.1",
     "@testing-library/jest-dom": "^5.11.6",
     "@testing-library/react": "^11.2.2",
     "@testing-library/user-event": "^12.5.0",
