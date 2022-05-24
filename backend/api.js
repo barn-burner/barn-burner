@@ -38,7 +38,11 @@ expressApp.get('/teams', function (req, res) {
     );
 });
 
-// /h2h/CAR-NYR or 12-7 ?
+// =============
+// Head to Head
+// Ex: 12-7 (BUF vs CAR)
+// ?start=<YYYY-MM-DD>&end=<YYYY-MM-DD>
+// If no start/end date specified then defaults to current season
 expressApp.get('/h2h/:one-:two', async (req, res) => {
     let teamOne = (+req.params.one);
     let teamTwo = (+req.params.two);
@@ -80,6 +84,22 @@ function getScheduleMatchups(schedule, idOne, idTwo) {
     });
     return matchups;
 }
+
+// =============
+// Get specific game by ID
+expressApp.get('/game/:gameid', async (req, res) => {
+    request(
+        `${baseURL}/game/${req.params.gameid}/feed/live`,
+        function (error, response, body) {
+            if (!error && response.statusCode === 200) {
+                logger.info(body);
+                res.json(JSON.parse(body.toString()));
+            } else {
+                res.json({ err: error, response: response, body: body });
+            }
+        }
+    );
+});
 
 function start() {
     server = expressApp.listen(
