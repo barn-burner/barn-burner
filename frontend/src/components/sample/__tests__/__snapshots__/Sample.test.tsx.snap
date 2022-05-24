@@ -1,0 +1,21 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Sample /> spec Renders normally 1`] = `
+<DocumentFragment>
+  <span
+    class="sample"
+  >
+     test 
+  </span>
+</DocumentFragment>
+`;
+
+exports[`<Sample /> spec Renders with className 1`] = `
+<DocumentFragment>
+  <span
+    class="sample testClass"
+  >
+     test 
+  </span>
+</DocumentFragment>
+`;
