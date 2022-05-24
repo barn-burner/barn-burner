@@ -10,8 +10,8 @@ const expressApp = express();
 let server;
 
 const baseURL = 'https://statsapi.web.nhl.com/api/v1';
-const seasonStart = "2021-10-12";
-const seasonEnd = "2022-06-01";
+const seasonStart = '2021-10-12';
+const seasonEnd = '2022-06-01';
 
 // TODO: Should these endpoints grow too large
 // They will need to be broken into individual controllers
@@ -42,8 +42,8 @@ expressApp.get('/teams', function (req, res) {
 expressApp.get('/h2h/:one-:two', async (req, res) => {
     let teamOne = (+req.params.one);
     let teamTwo = (+req.params.two);
-    let start = (req.query.start != null) ? req.query.start : seasonStart;
-    let end = (req.query.end != null) ? req.query.end : seasonEnd;
+    let start = (req.query.start !== null) ? req.query.start : seasonStart;
+    let end = (req.query.end !== null) ? req.query.end : seasonEnd;
     let sharedSchedule = await getCompareSchedules(teamOne, teamTwo, start, end);
     let matchups = getScheduleMatchups(sharedSchedule, teamOne, teamTwo);
 
