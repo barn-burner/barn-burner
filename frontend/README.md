@@ -1,4 +1,4 @@
-# barn-burner
+# barn-burner-frontend
 
 ## Requirements
 
