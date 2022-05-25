@@ -23,16 +23,24 @@ expressApp.get('/health', function (req, res) {
     health.runHealthChecks(res);
 });
 
-// =============
+// =====
 // Teams
 expressApp.get('/teams', function (req, res) {
+    let teamQuery = req.query.teamId ? `?teamId=${req.query.teamId}` : '';
     request(
-        `${baseURL}/teams`,
+        `${baseURL}/teams${teamQuery}`,
         function (error, response, body) {
             if (!error && response.statusCode === 200) {
-                logger.info(body);
-                res.json(JSON.parse(body.toString()));
+                logger.debug(body);
+                logger.info(`[${response.statusCode}] Request to /teams${teamQuery}`);
+                let teamsJson = JSON.parse(body.toString());
+                for (let [key] in teamsJson.teams) {
+                    teamsJson.teams[key].logoUrl = constructTeamLogoURL(teamsJson.teams[key].id);
+                }
+
+                res.json(teamsJson);
             } else {
+                logger.error(`[${response.statusCode}] Request to /teams${teamQuery}: ${error}`);
                 res.json({ err: error, response: response, body: body });
             }
         }
@@ -41,10 +49,10 @@ expressApp.get('/teams', function (req, res) {
 
 // Get Team logos
 expressApp.get('/team/logo/:teamid', function (req, res) {
-    res.json({ url: constructTeamURL(req.params.teamid) });
+    res.json({ url: constructTeamLogoURL(req.params.teamid) });
 });
 
-function constructTeamURL(teamid) {
+function constructTeamLogoURL(teamid) {
     return logoURL + teamid + '.svg';
 }
 
@@ -52,16 +60,16 @@ function constructTeamURL(teamid) {
 expressApp.get('/team/:teamid', async (req, res) => {
     let teamInfo = await getTeamInfo(req.params.teamid);
     res.json(teamInfo);
-})
+});
 
 async function getTeamInfo(teamid) {
     let response = (await axios.get(`${baseURL}/teams/${teamid}`)).data.teams[0];
     let teamInfo = {
-        "name": response.name,
-        "abbreviation": response.abbreviation,
-        "teamName": response.teamName,
-        "locationName": response.locationName,
-    }
+        name: response.name,
+        abbreviation: response.abbreviation,
+        teamName: response.teamName,
+        locationName: response.locationName
+    };
     return teamInfo;
 }
 
@@ -87,25 +95,25 @@ expressApp.get('/h2h/:one-:two', async (req, res) => {
 function getMatchupStats(matchups, idOne, idTwo) {
     let ratio = {
         [idOne]: {
-            "overall": {
-                "wins": 0, "losses": 0,
+            overall: {
+                wins: 0, losses: 0
             },
-            "home": {
-                "wins": 0, "losses": 0,
+            home: {
+                wins: 0, losses: 0
             },
-            "away": {
-                "wins": 0, "losses": 0,
+            away: {
+                wins: 0, losses: 0
             }
         },
         [idTwo]: {
-            "overall": {
-                "wins": 0, "losses": 0,
+            overall: {
+                wins: 0, losses: 0
             },
-            "home": {
-                "wins": 0, "losses": 0,
+            home: {
+                wins: 0, losses: 0
             },
-            "away": {
-                "wins": 0, "losses": 0,
+            away: {
+                wins: 0, losses: 0
             }
         }
     };
@@ -129,8 +137,8 @@ function getMatchupStats(matchups, idOne, idTwo) {
         // The second team is the inverse of the first
         ratio[idTwo].overall.wins = ratio[idOne].overall.losses;
         ratio[idTwo].overall.losses = ratio[idOne].overall.wins;
-    })
-    return ratio
+    });
+    return ratio;
 }
 
 async function getCompareSchedules(teamOne, teamTwo, start, end) {
@@ -164,7 +172,7 @@ function getScheduleMatchups(schedule, idOne, idTwo) {
     return matchups;
 }
 
-// =============
+// =======================
 // Get specific game by ID
 expressApp.get('/game/:gameid', async (req, res) => {
     request(
@@ -180,6 +188,8 @@ expressApp.get('/game/:gameid', async (req, res) => {
     );
 });
 
+// =============================
+// Express Server Main Functions
 function start() {
     server = expressApp.listen(
         config.APP_PORT,
