@@ -14,6 +14,18 @@ const logoURL = 'https://www-league.nhlstatic.com/images/logos/teams-current-pri
 const seasonStart = '2021-10-12';
 const seasonEnd = '2022-06-01';
 
+// =============================
+// =============================
+// Utility functions
+const handleError = (error) => {
+    if (error.response) {
+        console.log(error.response.data);
+        console.log(error.response.status);
+    } else {
+        console.log(error.message);
+    }
+}
+
 // TODO: Should these endpoints grow too large
 // They will need to be broken into individual controllers
 
@@ -117,58 +129,68 @@ function getMatchupStats(matchups, idOne, idTwo) {
             }
         }
     };
-    matchups.map((match) => {
-        let homeTeam = match.teams.home;
-        let awayTeam = match.teams.away;
-        if (homeTeam.score > awayTeam.score) {
-            // home team wins, away team loses
-            ratio[homeTeam.team.id].home.wins++;
-            ratio[awayTeam.team.id].away.losses++;
-        } else {
-            // away team wins, home team loses
-            ratio[awayTeam.team.id].away.wins++;
-            ratio[homeTeam.team.id].home.losses++;
-        }
+    if (matchups.length > 0) {
+        matchups.map((match) => {
+            let homeTeam = match.teams.home;
+            let awayTeam = match.teams.away;
+            if (homeTeam.score > awayTeam.score) {
+                // home team wins, away team loses
+                ratio[homeTeam.team.id].home.wins++;
+                ratio[awayTeam.team.id].away.losses++;
+            } else {
+                // away team wins, home team loses
+                ratio[awayTeam.team.id].away.wins++;
+                ratio[homeTeam.team.id].home.losses++;
+            }
 
-        // Overall = home + away wins and losses
-        ratio[idOne].overall.wins = ratio[idOne].home.wins + ratio[idOne].away.wins;
-        ratio[idOne].overall.losses = ratio[idOne].home.losses + ratio[idOne].away.losses;
+            // Overall = home + away wins and losses
+            ratio[idOne].overall.wins = ratio[idOne].home.wins + ratio[idOne].away.wins;
+            ratio[idOne].overall.losses = ratio[idOne].home.losses + ratio[idOne].away.losses;
 
-        // The second team is the inverse of the first
-        ratio[idTwo].overall.wins = ratio[idOne].overall.losses;
-        ratio[idTwo].overall.losses = ratio[idOne].overall.wins;
-    });
-    return ratio;
+            // The second team is the inverse of the first
+            ratio[idTwo].overall.wins = ratio[idOne].overall.losses;
+            ratio[idTwo].overall.losses = ratio[idOne].overall.wins;
+        })
+        return ratio
+    } else {
+        return ({ err: "Team data could not be processed" });
+    }
 }
 
 async function getCompareSchedules(teamOne, teamTwo, start, end) {
     const sharedSchedule = (
         await axios.get(
             `${baseURL}/schedule?teamId=${teamOne},${teamTwo}&startDate=${start}&endDate=${end}&gameType=R,P`
-        )
-    ).data;
-    return sharedSchedule;
+        ).catch(err => handleError(err))
+    );
+    if (sharedSchedule) {
+        return sharedSchedule.data;
+    } else {
+        return ({ "error": "could not fetch team data" });
+    }
 }
 
 function getScheduleMatchups(schedule, idOne, idTwo) {
     let matchups = [];
-    schedule.dates.map((date) => {
-        date.games.map((game) => {
-            if (
-                game.teams.away.team.id === idOne &&
-                game.teams.home.team.id === idTwo
-            ) {
-                matchups.push(game);
-            }
+    if (schedule.dates.length > 0) {
+        schedule.dates.map((date) => {
+            date.games.map((game) => {
+                if (
+                    game.teams.away.team.id === idOne &&
+                    game.teams.home.team.id === idTwo
+                ) {
+                    matchups.push(game);
+                }
 
-            if (
-                game.teams.away.team.id === idTwo &&
-                game.teams.home.team.id === idOne
-            ) {
-                matchups.push(game);
-            }
+                if (
+                    game.teams.away.team.id === idTwo &&
+                    game.teams.home.team.id === idOne
+                ) {
+                    matchups.push(game);
+                }
+            });
         });
-    });
+    }
     return matchups;
 }
 
