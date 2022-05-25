@@ -19,7 +19,7 @@ const seasonEnd = '2022-06-01';
 // Utility functions
 const handleError = (error) => {
     if (error.response) {
-        logger.error({data: error.response.data, status: error.response.status});
+        logger.error({ data: error.response.data, status: error.response.status });
     } else {
         logger.error(error.message);
     }
@@ -47,13 +47,13 @@ expressApp.get('/teams', async (req, res) => {
         logger.info(`[${teamsRequest.status}] Request to /teams${teamQuery} ${teamsRequest.statusText}`);
         let teamsJson = teamsRequest.data;
         let formattedTeamsObj = {};
-        teamsJson.teams.forEach(function(teamInfo) {
+        teamsJson.teams.forEach(function (teamInfo) {
             formattedTeamsObj[teamInfo.id] = formatTeamInfo(teamInfo);
         });
         let teamsSorted = [];
         if (teamParams) {
             let teamSortOrder = teamParams.split(',');
-            teamSortOrder.forEach(function(teamId) {
+            teamSortOrder.forEach(function (teamId) {
                 teamsSorted.push(formattedTeamsObj[teamId]);
             });
         } else {
@@ -77,6 +77,59 @@ function formatTeamInfo(allTeamInfo) {
         logoUrl: `${logoURL}${allTeamInfo.id}.svg`
     };
     return teamInfo;
+}
+// Get Team logos
+expressApp.get('/team/logo/:teamid', function (req, res) {
+    res.json({ url: constructTeamLogoURL(req.params.teamid) });
+});
+
+function constructTeamLogoURL(teamid) {
+    return logoURL + teamid + '.svg';
+}
+
+// GET request for matchup details between two teams. Does not return
+// overall win / loss like h2h
+expressApp.get('/matchup/:one-:two', async (req, res) => {
+    let teamOne = (+req.params.one);
+    let teamTwo = (+req.params.two);
+    let start = req.query.start ? req.query.start : seasonStart;
+    let end = req.query.end ? req.query.end : seasonEnd;
+    let sharedSchedule = await getCompareSchedules(teamOne, teamTwo, start, end);
+    let matchups = getScheduleMatchups(sharedSchedule, teamOne, teamTwo);
+    let metadata = getMatchupMetadata(matchups);
+
+    res.json(metadata);
+});
+
+// Returns specifc metadata about a given matchup
+function getMatchupMetadata(matchups) {
+    let gameMetadata = [];
+    console.log(matchups);
+    console.log(matchups.length);
+    if (matchups.length > 0) {
+        matchups.map((match) => {
+            let homeTeam = match.teams.home;
+            let awayTeam = match.teams.away;
+            let winner = (homeTeam.score > awayTeam.score) ? homeTeam : awayTeam;
+
+            gameMetadata.push({
+                gameId: match.gamePk,
+                gameDate: match.gameDate,
+                winnerId: winner.team.id,
+                home: {
+                    id: homeTeam.team.id,
+                    score: homeTeam.score,
+                },
+                away: {
+                    id: awayTeam.team.id,
+                    score: awayTeam.score,
+                }
+            });
+        });
+        return gameMetadata;
+    } else {
+        return ({ err: 'Matchup data could not be processed' });
+    }
 }
 
 // =============================
@@ -123,7 +176,8 @@ function getMatchupStats(matchups, idOne, idTwo) {
                 wins: 0, losses: 0
             }
         }
-    };
+    }
+
     if (matchups.length > 0) {
         matchups.map((match) => {
             let homeTeam = match.teams.home;
@@ -146,7 +200,11 @@ function getMatchupStats(matchups, idOne, idTwo) {
             ratio[idTwo].overall.wins = ratio[idOne].overall.losses;
             ratio[idTwo].overall.losses = ratio[idOne].overall.wins;
         });
-        return ratio;
+        // Lets us maintain the correct order of the array. Id one is always [0] and id two is always [1]
+        let finalScores = [];
+        finalScores.push(ratio[idOne]);
+        finalScores.push(ratio[idTwo]);
+        return finalScores;
     } else {
         return ({ err: 'Team data could not be processed' });
     }
