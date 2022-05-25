@@ -3,17 +3,14 @@ export interface LogoInterface {
 }
 
 export interface TeamInterface {
-  name: string,
-  abbreviation: string,
-  teamName: string,
-  locationName: string
-}
-
-export interface TeamInfoInterface {
   abbreviation: string,
   id: string,
   locationName: string,
   name: string,
   teamName: string,
   url: string
+}
+
+export interface TeamsInterface {
+  [index: number]: TeamInterface
 }
