@@ -88,7 +88,7 @@ const GameList: React.FC<GameListProps> = ({ team1, team2, className, ...props }
                   <span className='teamScore'>{game.home.score}</span>
                 </Col>
                 <Col span={2}>
-                  <span className='vs'> vs </span>
+                  <span className='vs'> - </span>
                 </Col>
                 <Col span={11} className={game.winnerId === game.away.id ? 'winner' : 'loser'}>
                   <span className='teamScore'>{game.away.score}</span>
