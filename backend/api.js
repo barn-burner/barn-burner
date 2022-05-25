@@ -19,10 +19,9 @@ const seasonEnd = '2022-06-01';
 // Utility functions
 const handleError = (error) => {
     if (error.response) {
-        console.log(error.response.data);
-        console.log(error.response.status);
+        logger.error({data: error.response.data, status: error.response.status});
     } else {
-        console.log(error.message);
+        logger.error(error.message);
     }
 };
 
@@ -39,37 +38,33 @@ expressApp.get('/health', function (req, res) {
 // =============================
 // =============================
 // Teams
-expressApp.get('/teams', function (req, res) {
+expressApp.get('/teams', async (req, res) => {
     let teamParams = req.query.teamId ? req.query.teamId : null;
     let teamQuery = teamParams ? `?teamId=${teamParams}` : '';
-    request(
-        `${baseURL}/teams${teamQuery}`,
-        function (error, response, body) {
-            if (!error && response.statusCode === 200) {
-                logger.debug(body);
-                logger.info(`[${response.statusCode}] Request to /teams${teamQuery}`);
-                let teamsJson = JSON.parse(body.toString());
-                let formattedTeamsObj = {};
-                teamsJson.teams.forEach(function(teamInfo) {
-                    formattedTeamsObj[teamInfo.id] = formatTeamInfo(teamInfo);
-                });
-                let teamsSorted = [];
-                if (teamParams) {
-                    let teamSortOrder = teamParams.split(',');
-                    teamSortOrder.forEach(function(teamId) {
-                        teamsSorted.push(formattedTeamsObj[teamId]);
-                    });
-                } else {
-                    teamsSorted = Object.values(formattedTeamsObj);
-                }
-
-                res.json(teamsSorted);
-            } else {
-                logger.error(`[${response.statusCode}] Request to /teams${teamQuery}: ${error}`);
-                res.json({ err: error, response: response, body: body });
-            }
+    let teamsRequest = await axios.get(`${baseURL}/teams${teamQuery}`).catch(err => handleError(err));
+    if (teamsRequest && teamsRequest.status === 200) {
+        logger.debug(teamsRequest.data);
+        logger.info(`[${teamsRequest.status}] Request to /teams${teamQuery} ${teamsRequest.statusText}`);
+        let teamsJson = teamsRequest.data;
+        let formattedTeamsObj = {};
+        teamsJson.teams.forEach(function(teamInfo) {
+            formattedTeamsObj[teamInfo.id] = formatTeamInfo(teamInfo);
+        });
+        let teamsSorted = [];
+        if (teamParams) {
+            let teamSortOrder = teamParams.split(',');
+            teamSortOrder.forEach(function(teamId) {
+                teamsSorted.push(formattedTeamsObj[teamId]);
+            });
+        } else {
+            teamsSorted = Object.values(formattedTeamsObj);
         }
-    );
+
+        res.json(teamsSorted);
+    } else {
+        logger.error(`[XXX] Request to /teams${teamQuery} failed`);
+        res.json({ err: 'Failure retrieving teams' });
+    }
 });
 
 function formatTeamInfo(allTeamInfo) {
