@@ -17,16 +17,19 @@ const seasonEnd = '2022-06-01';
 // TODO: Should these endpoints grow too large
 // They will need to be broken into individual controllers
 
-// =============
+// =============================
+// =============================
 // Health Checks
 expressApp.get('/health', function (req, res) {
     health.runHealthChecks(res);
 });
 
-// =====
+// =============================
+// =============================
 // Teams
 expressApp.get('/teams', function (req, res) {
-    let teamQuery = req.query.teamId ? `?teamId=${req.query.teamId}` : '';
+    let teamParams = req.query.teamId ? req.query.teamId : null;
+    let teamQuery = teamParams ? `?teamId=${teamParams}` : '';
     request(
         `${baseURL}/teams${teamQuery}`,
         function (error, response, body) {
@@ -34,11 +37,21 @@ expressApp.get('/teams', function (req, res) {
                 logger.debug(body);
                 logger.info(`[${response.statusCode}] Request to /teams${teamQuery}`);
                 let teamsJson = JSON.parse(body.toString());
-                for (let [key] in teamsJson.teams) {
-                    teamsJson.teams[key].logoUrl = constructTeamLogoURL(teamsJson.teams[key].id);
+                let formattedTeamsObj = {};
+                teamsJson.teams.forEach(function(teamInfo) {
+                    formattedTeamsObj[teamInfo.id] = formatTeamInfo(teamInfo);
+                });
+                let teamsSorted = [];
+                if (teamParams) {
+                    let teamSortOrder = teamParams.split(',');
+                    teamSortOrder.forEach(function(teamId) {
+                        teamsSorted.push(formattedTeamsObj[teamId]);
+                    });
+                } else {
+                    teamsSorted = Object.values(formattedTeamsObj);
                 }
 
-                res.json(teamsJson);
+                res.json(teamsSorted);
             } else {
                 logger.error(`[${response.statusCode}] Request to /teams${teamQuery}: ${error}`);
                 res.json({ err: error, response: response, body: body });
@@ -47,33 +60,20 @@ expressApp.get('/teams', function (req, res) {
     );
 });
 
-// Get Team logos
-expressApp.get('/team/logo/:teamid', function (req, res) {
-    res.json({ url: constructTeamLogoURL(req.params.teamid) });
-});
-
-function constructTeamLogoURL(teamid) {
-    return logoURL + teamid + '.svg';
-}
-
-// Get info about a team given an ID
-expressApp.get('/team/:teamid', async (req, res) => {
-    let teamInfo = await getTeamInfo(req.params.teamid);
-    res.json(teamInfo);
-});
-
-async function getTeamInfo(teamid) {
-    let response = (await axios.get(`${baseURL}/teams/${teamid}`)).data.teams[0];
+function formatTeamInfo(allTeamInfo) {
     let teamInfo = {
-        name: response.name,
-        abbreviation: response.abbreviation,
-        teamName: response.teamName,
-        locationName: response.locationName
+        id: allTeamInfo.id,
+        name: allTeamInfo.name,
+        abbreviation: allTeamInfo.abbreviation,
+        teamName: allTeamInfo.teamName,
+        locationName: allTeamInfo.locationName,
+        logoUrl: `${logoURL}${allTeamInfo.id}.svg`
     };
     return teamInfo;
 }
 
-// =============
+// =============================
+// =============================
 // Head to Head
 // Ex: 12-7 (BUF vs CAR)
 // ?start=<YYYY-MM-DD>&end=<YYYY-MM-DD>
@@ -172,7 +172,9 @@ function getScheduleMatchups(schedule, idOne, idTwo) {
     return matchups;
 }
 
-// =======================
+// =============================
+// =============================
+// Games
 // Get specific game by ID
 expressApp.get('/game/:gameid', async (req, res) => {
     request(
@@ -188,6 +190,7 @@ expressApp.get('/game/:gameid', async (req, res) => {
     );
 });
 
+// =============================
 // =============================
 // Express Server Main Functions
 function start() {
