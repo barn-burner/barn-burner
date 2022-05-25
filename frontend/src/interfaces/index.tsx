@@ -14,3 +14,17 @@ export interface TeamInterface {
 export interface TeamsInterface {
   [index: number]: TeamInterface
 }
+
+export interface SingleGameDataInterface {
+  away: {
+    id: number,
+    score: number
+  },
+  gameDate: string,
+  gameId: number
+  home: {
+    id: number,
+    score: number
+  },
+  winnerId: number
+}
