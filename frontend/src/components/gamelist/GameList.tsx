@@ -69,6 +69,15 @@ const GameList: React.FC<GameListProps> = ({ team1, team2, className, ...props }
       <Row>
         <Col span={24}> All matchups </Col>
       </Row>
+      <Row className={classes} {...props}>
+        <Col span={11}>
+          Home
+        </Col>
+        <Col span={2}></Col>
+        <Col span={11}>
+          Away
+        </Col>
+      </Row>
       {
         data.map((game: SingleGameDataInterface, index: number) => {
             return(
