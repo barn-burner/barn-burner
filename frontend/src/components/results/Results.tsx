@@ -1,6 +1,6 @@
 import React from 'react';
 import classNames from 'classnames';
-import { Row, Col } from 'antd';
+import { Card, Row, Col } from 'antd';
 
 import './Results.scss';
 import { TeamInterface } from '../../interfaces';
@@ -18,19 +18,35 @@ const Results: React.FC<ResultsProps> = ({ team1, team2, className, ...props }) 
 
   return (
     <>
-      <Row className={classes} {...props}>
-        <Col span={24}>
-          Matchup
-        </Col>
-      </Row>
-      <Row>
-        <Col span={12}>
-          <span className='teamName'>{team1?.name}</span>
-          <img className='teamLogo' src={team1?.logoUrl}/>
-        </Col>
-        <Col span={12}>
-          <span className='teamName'>{team2?.name}</span>
-          <img className='teamLogo' src={team2?.logoUrl}/>
+      <Row justify="center">
+        <Col xs={24} sm={24} md={20} lg={16}>
+          <Card className="resultsCard" title="MATCHUP">
+            <Row gutter={24} justify="center" align="middle">
+              <Col xs={24} sm={24} md={10} lg={10} xl={10}>
+                <Card
+                  // bordered={false}
+                  type="inner" 
+                  title={team1?.name} 
+                  className="teamCard"
+                >
+                  <img src={team1?.logoUrl} />
+                </Card>
+              </Col>
+              <Col xs={2} sm={2} md={2} lg={2} xl={2} className="vs">
+                <img src={"/vs.png"} />
+              </Col>
+              <Col xs={24} sm={24} md={10} lg={10} xl={10}>
+                <Card
+                  // bordered={false}
+                  type="inner" 
+                  title={team2?.name} 
+                  className="teamCard"
+                >
+                  {<img src={team2?.logoUrl} />}
+                </Card>
+              </Col>
+            </Row>
+          </Card>
         </Col>
       </Row>
     </>

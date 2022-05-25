@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from "react-router-dom";
 import classNames from 'classnames';
-import { Row, Col } from 'antd';
+import { Card, Table, Row, Col } from 'antd';
 
 import './GameList.scss';
 
@@ -65,41 +65,45 @@ const GameList: React.FC<GameListProps> = ({ team1, team2, className, ...props }
 
 
   return (
-    <div className={classes} {...props}>
-      <Row>
-        <Col span={24}> All matchups </Col>
-      </Row>
-      <Row className={classes} {...props}>
-        <Col span={11}>
-          Home
-        </Col>
-        <Col span={2}></Col>
-        <Col span={11}>
-          Away
-        </Col>
-      </Row>
-      {
-        data.map((game: SingleGameDataInterface, index: number) => {
-            return(
-              <Row key={index} onClick={() => goToGameDetails(game.gameId)}>
-                <Col span={11} className={game.winnerId === game.home.id ? 'winner' : 'loser'}>
-                  <img className='icon' src={generateIconFromId(game.home.id)}/>
-                  <span className='teamName'>{generateNameFromId(game.home.id)}</span>
-                  <span className='teamScore'>{game.home.score}</span>
-                </Col>
-                <Col span={2}>
-                  <span className='vs'> - </span>
-                </Col>
-                <Col span={11} className={game.winnerId === game.away.id ? 'winner' : 'loser'}>
-                  <span className='teamScore'>{game.away.score}</span>
-                  <span className='teamName'>{generateNameFromId(game.away.id)}</span>
-                  <img className='icon' src={generateIconFromId(game.away.id)}/>
-                </Col>
-              </Row>
-            )
-        }
-      )}
-    </div>
+
+    <Row justify="center">
+      <Col xs={24} sm={24} md={20} lg={16}>
+        <Card title="All MATCHUPS" className="allMatchesCard">
+          <div className={classes} {...props}>
+            <Row className={classes} {...props}>
+              <Col span={11}>
+                Home
+              </Col>
+              <Col span={2}></Col>
+              <Col span={11}>
+                Away
+              </Col>
+            </Row>
+            {
+              data.map((game: SingleGameDataInterface, index: number) => {
+                  return(
+                    <Row key={index} onClick={() => goToGameDetails(game.gameId)}>
+                      <Col span={11} className={game.winnerId === game.home.id ? 'winner' : 'loser'}>
+                        <img className='icon' src={generateIconFromId(game.home.id)}/>
+                        <span className='teamName'>{generateNameFromId(game.home.id)}</span>
+                        <span className='teamScore'>{game.home.score}</span>
+                      </Col>
+                      <Col span={2}>
+                        <span className='vs'> - </span>
+                      </Col>
+                      <Col span={11} className={game.winnerId === game.away.id ? 'winner' : 'loser'}>
+                        <span className='teamScore'>{game.away.score}</span>
+                        <span className='teamName'>{generateNameFromId(game.away.id)}</span>
+                        <img className='icon' src={generateIconFromId(game.away.id)}/>
+                      </Col>
+                    </Row>
+                  )
+              }
+            )}
+          </div>
+        </Card>
+      </Col>
+    </Row>
   );
 };
 

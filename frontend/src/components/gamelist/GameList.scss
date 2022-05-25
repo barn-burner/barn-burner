@@ -1,3 +1,20 @@
+.allMatchesCard {
+  // background-image: url("/src/images/backgroud.png");
+  background-position: bottom right;
+  background: #f4f4f4 !important;
+  margin-bottom: 24px !important;
+  .ant-card {
+    &-head {
+      background: #232323;
+      color: #fff;
+    }
+    &-body {
+      margin: 24px;
+    }
+  }
+}
+
+
 .icon { 
   height: 15px;
 }
