@@ -14,48 +14,9 @@ const logoURL = 'https://www-league.nhlstatic.com/images/logos/teams-current-pri
 const seasonStart = '2021-10-12';
 const seasonEnd = '2022-06-01';
 
-// TODO: Should these endpoints grow too large
-// They will need to be broken into individual controllers
-
-// =============
-// Health Checks
-expressApp.get('/health', function (req, res) {
-    health.runHealthChecks(res);
-});
-
-// =====
-// Teams
-expressApp.get('/teams', function (req, res) {
-    let teamQuery = req.query.teamId ? `?teamId=${req.query.teamId}` : '';
-    request(
-        `${baseURL}/teams${teamQuery}`,
-        function (error, response, body) {
-            if (!error && response.statusCode === 200) {
-                logger.debug(body);
-                logger.info(`[${response.statusCode}] Request to /teams${teamQuery}`);
-                let teamsJson = JSON.parse(body.toString());
-                for (let [key] in teamsJson.teams) {
-                    teamsJson.teams[key].logoUrl = constructTeamLogoURL(teamsJson.teams[key].id);
-                }
-
-                res.json(teamsJson);
-            } else {
-                logger.error(`[${response.statusCode}] Request to /teams${teamQuery}: ${error}`);
-                res.json({ err: error, response: response, body: body });
-            }
-        }
-    );
-});
-
-// Get Team logos
-expressApp.get('/team/logo/:teamid', function (req, res) {
-    res.json({ url: constructTeamLogoURL(req.params.teamid) });
-});
-
-function constructTeamLogoURL(teamid) {
-    return logoURL + teamid + '.svg';
-}
-
+// =============================
+// =============================
+// Utility functions
 const handleError = (error) => {
     if (error.response) {
         console.log(error.response.data);
@@ -65,7 +26,66 @@ const handleError = (error) => {
     }
 }
 
-// =============
+// TODO: Should these endpoints grow too large
+// They will need to be broken into individual controllers
+
+// =============================
+// =============================
+// Health Checks
+expressApp.get('/health', function (req, res) {
+    health.runHealthChecks(res);
+});
+
+// =============================
+// =============================
+// Teams
+expressApp.get('/teams', function (req, res) {
+    let teamParams = req.query.teamId ? req.query.teamId : null;
+    let teamQuery = teamParams ? `?teamId=${teamParams}` : '';
+    request(
+        `${baseURL}/teams${teamQuery}`,
+        function (error, response, body) {
+            if (!error && response.statusCode === 200) {
+                logger.debug(body);
+                logger.info(`[${response.statusCode}] Request to /teams${teamQuery}`);
+                let teamsJson = JSON.parse(body.toString());
+                let formattedTeamsObj = {};
+                teamsJson.teams.forEach(function(teamInfo) {
+                    formattedTeamsObj[teamInfo.id] = formatTeamInfo(teamInfo);
+                });
+                let teamsSorted = [];
+                if (teamParams) {
+                    let teamSortOrder = teamParams.split(',');
+                    teamSortOrder.forEach(function(teamId) {
+                        teamsSorted.push(formattedTeamsObj[teamId]);
+                    });
+                } else {
+                    teamsSorted = Object.values(formattedTeamsObj);
+                }
+
+                res.json(teamsSorted);
+            } else {
+                logger.error(`[${response.statusCode}] Request to /teams${teamQuery}: ${error}`);
+                res.json({ err: error, response: response, body: body });
+            }
+        }
+    );
+});
+
+function formatTeamInfo(allTeamInfo) {
+    let teamInfo = {
+        id: allTeamInfo.id,
+        name: allTeamInfo.name,
+        abbreviation: allTeamInfo.abbreviation,
+        teamName: allTeamInfo.teamName,
+        locationName: allTeamInfo.locationName,
+        logoUrl: `${logoURL}${allTeamInfo.id}.svg`
+    };
+    return teamInfo;
+}
+
+// =============================
+// =============================
 // Head to Head
 // Ex: 12-7 (BUF vs CAR)
 // ?start=<YYYY-MM-DD>&end=<YYYY-MM-DD>
@@ -174,7 +194,9 @@ function getScheduleMatchups(schedule, idOne, idTwo) {
     return matchups;
 }
 
-// =======================
+// =============================
+// =============================
+// Games
 // Get specific game by ID
 expressApp.get('/game/:gameid', async (req, res) => {
     request(
@@ -190,6 +212,7 @@ expressApp.get('/game/:gameid', async (req, res) => {
     );
 });
 
+// =============================
 // =============================
 // Express Server Main Functions
 function start() {
