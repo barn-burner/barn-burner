@@ -1,6 +1,6 @@
 import React from 'react';
 import classNames from 'classnames';
-import { Grid, Container } from '@mui/material';
+import { Row, Col } from 'antd';
 
 import './GameList.scss';
 
@@ -17,30 +17,23 @@ const GameList: React.FC<GameListProps> = ({ className, ...props }) => {
 
 
   return (
-    <Grid container spacing={2} className={classes} {...props}>
-      <Grid item xs={12}>
-        Game List
-      </Grid>
-      <Grid item xs={5}>
-        <Container>
+    <div className={classes} {...props}>
+      <Row>
+        <Col span={11}>
           <span> Home icon </span>
           <span> Home Name </span>
           <span> Home score </span>
-        </Container>
-      </Grid>
-      <Grid item xs={2}>
-        <Container>
+        </Col>
+        <Col span={2}>
           <span> vs </span>
-        </Container>
-      </Grid>
-      <Grid item xs={5}>
-        <Container>
+        </Col>
+        <Col span={11}>
           <span> Home score </span>
           <span> Home Name </span>
           <span> Home icon </span>
-        </Container>
-      </Grid>
-    </Grid>
+        </Col>
+      </Row>
+    </div>
   );
 };
 

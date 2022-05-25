@@ -10,7 +10,7 @@ export const calculateAverage = (input: number[]):number => {
   return avgRounded;
 };
 
-export const useQuery = (input: string): string => {
+export const getParams = (input: string): string => {
   const queryString = window.location.search;
   const params = new URLSearchParams(queryString);
   const q = params.get(input);
