@@ -23,7 +23,7 @@ expressApp.get('/health', function (req, res) {
     health.runHealthChecks(res);
 });
 
-// =============
+// =====
 // Teams
 expressApp.get('/teams', function (req, res) {
     let teamQuery = req.query.teamId ? `?teamId=${req.query.teamId}` : '';
@@ -172,7 +172,7 @@ function getScheduleMatchups(schedule, idOne, idTwo) {
     return matchups;
 }
 
-// =============
+// =======================
 // Get specific game by ID
 expressApp.get('/game/:gameid', async (req, res) => {
     request(
@@ -188,6 +188,8 @@ expressApp.get('/game/:gameid', async (req, res) => {
     );
 });
 
+// =============================
+// Express Server Main Functions
 function start() {
     server = expressApp.listen(
         config.APP_PORT,
