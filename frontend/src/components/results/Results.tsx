@@ -1,6 +1,6 @@
 import React from 'react';
 import classNames from 'classnames';
-import Grid from '@mui/material/Grid';
+import { Row, Col } from 'antd';
 import { useQuery } from '../../utils';
 
 import './Results.scss';
@@ -22,19 +22,23 @@ const Results: React.FC<ResultsProps> = ({ className, ...props }) => {
   console.log(team1, team2);
 
   return (
-    <Grid container spacing={2} className={classes} {...props}>
-      <Grid item xs={12}>
-        Results
-      </Grid>
-      <Grid item xs={6}>
-        {team1} logo
-        {team1} name
-      </Grid>
-      <Grid item xs={6}>
-        {team2} logo
-        {team2} name
-      </Grid>
-    </Grid>
+    <>
+      <Row className={classes} {...props}>
+        <Col span={24}>
+          Results
+        </Col>
+      </Row>
+      <Row>
+        <Col span={12}>
+          {team1} logo
+          {team1} name
+        </Col>
+        <Col span={12}>
+          {team2} logo
+          {team2} name
+        </Col>
+      </Row>
+    </>
   );
 };
 
