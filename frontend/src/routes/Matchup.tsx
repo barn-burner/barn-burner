@@ -31,8 +31,6 @@ const Matchup: React.FC = () => {
   if(isError) { return <span> error </span> }
   if(isLoading || !data) { return <span> loading </span> }
 
-  console.log(data);
-
   return (
     <div className='Matchup'>
       <Results team1={data[0]} team2={data[1]} />
