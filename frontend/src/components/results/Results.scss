@@ -1,0 +1,37 @@
+.resultsCard {
+  // background-image: url("/src/images/backgroud.png");
+  background-position: bottom right;
+  background: #f4f4f4 !important;
+  margin-bottom: 24px !important;
+  .ant-card {
+    &-head {
+      background: #232323;
+      color: #fff;
+    }
+    &-body {
+      margin: 24px;
+    }
+  }
+}
+
+
+.teamCard {
+  background: #f4f4f4;
+  .ant-card-head {
+    color: #000;
+    &-title {
+      font-weight: bold;
+      text-align: center;
+    }
+  }
+  img { 
+    width:90%
+  }
+}
+
+.vs {
+  padding: 0 !important;
+  img {
+    width:100%;
+  }
+}
