@@ -4,9 +4,10 @@ const config = require('./config.js');
 const health = require('./health.js');
 const logger = require('./logger.js');
 const express = require('express');
-const request = require('request');
+const cors = require('cors');
 const axios = require('axios');
 const expressApp = express();
+expressApp.use(cors());
 let server;
 
 const baseURL = 'https://statsapi.web.nhl.com/api/v1';
