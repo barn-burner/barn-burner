@@ -208,7 +208,7 @@ expressApp.get('/game/:gameid', async (req, res) => {
         res.json(gameRequest.data);
     } else {
         logger.error(`[XXX] Request to ${gameURL} failed`);
-        res.json({ err: 'Failure retrieving game' });
+        res.json({ err: `Failure retrieving game ${req.params.gameid}` });
     }
 });
 
