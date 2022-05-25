@@ -16,8 +16,6 @@ const Results: React.FC<ResultsProps> = ({ team1, team2, className, ...props }) 
     className
   );
 
-  console.log(team1)
-
   return (
     <>
       <Row className={classes} {...props}>

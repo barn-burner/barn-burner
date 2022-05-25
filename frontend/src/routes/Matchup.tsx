@@ -34,7 +34,7 @@ const Matchup: React.FC = () => {
   return (
     <div className='Matchup'>
       <Results team1={data[0]} team2={data[1]} />
-      <GameList/>
+      <GameList team1={data[0]} team2={data[1]} />
     </div>
   );
 }
