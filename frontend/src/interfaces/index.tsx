@@ -8,7 +8,7 @@ export interface TeamInterface {
   locationName: string,
   name: string,
   teamName: string,
-  url: string
+  logoUrl: string
 }
 
 export interface TeamsInterface {
