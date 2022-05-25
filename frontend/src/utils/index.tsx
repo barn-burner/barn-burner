@@ -14,5 +14,6 @@ export const getParams = (input: string): string => {
   const queryString = window.location.search;
   const params = new URLSearchParams(queryString);
   const q = params.get(input);
-  return q || 'invalid';
+
+  return q ? q : '1';
 }

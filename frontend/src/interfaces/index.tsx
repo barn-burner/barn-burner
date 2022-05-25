@@ -8,3 +8,12 @@ export interface TeamInterface {
   teamName: string,
   locationName: string
 }
+
+export interface TeamInfoInterface {
+  abbreviation: string,
+  id: string,
+  locationName: string,
+  name: string,
+  teamName: string,
+  url: string
+}
