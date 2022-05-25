@@ -24,7 +24,7 @@ const handleError = (error) => {
     } else {
         console.log(error.message);
     }
-}
+};
 
 // TODO: Should these endpoints grow too large
 // They will need to be broken into individual controllers
@@ -150,10 +150,10 @@ function getMatchupStats(matchups, idOne, idTwo) {
             // The second team is the inverse of the first
             ratio[idTwo].overall.wins = ratio[idOne].overall.losses;
             ratio[idTwo].overall.losses = ratio[idOne].overall.wins;
-        })
-        return ratio
+        });
+        return ratio;
     } else {
-        return ({ err: "Team data could not be processed" });
+        return ({ err: 'Team data could not be processed' });
     }
 }
 
@@ -166,7 +166,7 @@ async function getCompareSchedules(teamOne, teamTwo, start, end) {
     if (sharedSchedule) {
         return sharedSchedule.data;
     } else {
-        return ({ "error": "could not fetch team data" });
+        return ({ error: 'could not fetch team data' });
     }
 }
 
@@ -191,6 +191,7 @@ function getScheduleMatchups(schedule, idOne, idTwo) {
             });
         });
     }
+
     return matchups;
 }
 
@@ -199,17 +200,16 @@ function getScheduleMatchups(schedule, idOne, idTwo) {
 // Games
 // Get specific game by ID
 expressApp.get('/game/:gameid', async (req, res) => {
-    request(
-        `${baseURL}/game/${req.params.gameid}/feed/live`,
-        function (error, response, body) {
-            if (!error && response.statusCode === 200) {
-                logger.info(body);
-                res.json(JSON.parse(body.toString()));
-            } else {
-                res.json({ err: error, response: response, body: body });
-            }
-        }
-    );
+    let gameURL = `/game/${req.params.gameid}/feed/live`;
+    let gameRequest = await axios.get(`${baseURL}${gameURL}`).catch(err => handleError(err));
+    if (gameRequest && gameRequest.status === 200) {
+        logger.debug(gameRequest.data);
+        logger.info(`[${gameRequest.status}] Request to ${gameURL} ${gameRequest.statusText}`);
+        res.json(gameRequest.data);
+    } else {
+        logger.error(`[XXX] Request to ${gameURL} failed`);
+        res.json({ err: 'Failure retrieving game' });
+    }
 });
 
 // =============================
