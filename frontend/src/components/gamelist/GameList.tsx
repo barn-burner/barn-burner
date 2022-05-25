@@ -25,7 +25,7 @@ const GameList: React.FC<GameListProps> = ({ team1, team2, className, ...props }
   const history = useHistory();
 
   async function fetchHistoricalMatchups(team1ID: string, team2ID: string) {
-    const res = await fetch(`http://barnburner-backend.herokuapp.com/matchup/${team1ID}-${team2ID}`);
+    const res = await fetch(`https://barnburner-backend.herokuapp.com/matchup/${team1ID}-${team2ID}`);
     if(res.ok) {
       const data = await res.json();
       setData(data);

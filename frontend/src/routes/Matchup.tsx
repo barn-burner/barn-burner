@@ -12,7 +12,7 @@ const Matchup: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   async function fetchTeamData(team1ID: string, team2ID: string) {
-    const res = await fetch(`http://barnburner-backend.herokuapp.com/teams?teamId=${team1ID},${team2ID}`);
+    const res = await fetch(`https://barnburner-backend.herokuapp.com/teams?teamId=${team1ID},${team2ID}`);
 
     if(res.ok) {
       const data = await res.json();
