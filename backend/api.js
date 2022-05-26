@@ -85,14 +85,6 @@ function formatTeamInfo(allTeamInfo) {
     };
     return teamInfo;
 }
-// Get Team logos
-expressApp.get('/team/logo/:teamid', function (req, res) {
-    res.json({ url: constructTeamLogoURL(req.params.teamid) });
-});
-
-function constructTeamLogoURL(teamid) {
-    return logoURL + teamid + '.svg';
-}
 
 // GET request for matchup details between two teams. Does not return
 // overall win / loss like h2h
@@ -111,8 +103,8 @@ expressApp.get('/matchup/:one-:two', async (req, res) => {
 // Returns specifc metadata about a given matchup
 function getMatchupMetadata(matchups) {
     let gameMetadata = [];
-    console.log(matchups);
-    console.log(matchups.length);
+    logger.debug(matchups);
+    logger.debug(matchups.length);
     if (matchups.length > 0) {
         matchups.map((match) => {
             let homeTeam = match.teams.home;
