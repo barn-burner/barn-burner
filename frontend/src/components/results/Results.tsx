@@ -1,6 +1,6 @@
 import React from 'react';
 import classNames from 'classnames';
-import { Card, Row, Col } from 'antd';
+import { Card, Divider, Row, Col } from 'antd';
 
 import './Results.scss';
 import { TeamInterface, h2hDetailsInterface } from '../../interfaces';
@@ -28,10 +28,11 @@ const Results: React.FC<ResultsProps> = ({ team1, team2, team1Record, team2Recor
   return (
     <>
       <Row justify="center">
-        <Col xs={24} sm={24} md={20} lg={16}>
+        <Col xs={22} sm={22} md={20} lg={16}>
           <Card className="resultsCard" title="MATCHUP!">
             <Row gutter={24} justify="center" align="middle">
-              <Col xs={24} sm={24} md={11} lg={11} xl={11}>
+              <Divider dashed />
+              <Col xs={24} sm={24} md={10} lg={9} xl={9}>
                 <Card
                   bordered={false}
                   type="inner" 
@@ -42,10 +43,10 @@ const Results: React.FC<ResultsProps> = ({ team1, team2, team1Record, team2Recor
                   <span className='record'> {generateRecordString(team1Record)} </span>
                 </Card>
               </Col>
-              <Col xs={2} sm={3} md={2} lg={2} xl={2} className="vs" >
+              <Col xs={3} sm={3} md={2} lg={2} xl={2} className="vs" >
                 VS
               </Col>
-              <Col xs={24} sm={24} md={11} lg={11} xl={11}>
+              <Col xs={24} sm={24} md={10} lg={9} xl={9}>
                 <Card
                   bordered={false}
                   type="inner" 
