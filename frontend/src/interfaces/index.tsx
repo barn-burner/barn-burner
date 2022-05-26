@@ -28,3 +28,14 @@ export interface SingleGameDataInterface {
   },
   winnerId: number
 }
+
+export interface h2hInterface {
+  overall:  h2hDetailsInterface
+  home: h2hDetailsInterface
+  away: h2hDetailsInterface
+}
+
+export interface h2hDetailsInterface {
+  wins: number,
+  losses: number
+}
