@@ -3,18 +3,27 @@ import classNames from 'classnames';
 import { Card, Row, Col } from 'antd';
 
 import './Results.scss';
-import { TeamInterface } from '../../interfaces';
+import { TeamInterface, h2hDetailsInterface } from '../../interfaces';
 interface ResultsProps {
   team1: TeamInterface,
   team2: TeamInterface
   className?: string,
+  team1Record: h2hDetailsInterface,
+  team2Record: h2hDetailsInterface,
 }
-const Results: React.FC<ResultsProps> = ({ team1, team2, className, ...props }) => {
+const Results: React.FC<ResultsProps> = ({ team1, team2, team1Record, team2Record, className, ...props }) => {
 
   const classes = classNames(
     'Results',
     className
   );
+
+  const generateRecordString = (record: h2hDetailsInterface) =>{
+    return `${record.wins}-${record.losses}`;
+  }
+
+  const winner = team1Record.wins > team2Record.wins ? team1 : team2;
+  console.log('winner', winner);
 
   return (
     <>
@@ -22,7 +31,7 @@ const Results: React.FC<ResultsProps> = ({ team1, team2, className, ...props }) 
         <Col xs={24} sm={24} md={20} lg={16}>
           <Card className="resultsCard" title="MATCHUP!">
             <Row gutter={24} justify="center" align="middle">
-              <Col xs={24} sm={24} md={10} lg={10} xl={10}>
+              <Col xs={24} sm={24} md={11} lg={11} xl={11}>
                 <Card
                   bordered={false}
                   type="inner" 
@@ -30,12 +39,13 @@ const Results: React.FC<ResultsProps> = ({ team1, team2, className, ...props }) 
                   className="teamCard"
                 >
                   <img src={team1?.logoUrl} />
+                  <span className='record'> {generateRecordString(team1Record)} </span>
                 </Card>
               </Col>
-              <Col xs={2} sm={3} md={3} lg={3} xl={3} className="vs" >
+              <Col xs={2} sm={3} md={2} lg={2} xl={2} className="vs" >
                 VS
               </Col>
-              <Col xs={24} sm={24} md={10} lg={10} xl={10}>
+              <Col xs={24} sm={24} md={11} lg={11} xl={11}>
                 <Card
                   bordered={false}
                   type="inner" 
@@ -43,6 +53,7 @@ const Results: React.FC<ResultsProps> = ({ team1, team2, className, ...props }) 
                   className="teamCard"
                 >
                   {<img src={team2?.logoUrl} />}
+                  <span className='record'> {generateRecordString(team2Record)} </span>
                 </Card>
               </Col>
             </Row>
