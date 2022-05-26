@@ -3,6 +3,7 @@ import './Page.scss';
 
 interface PageProps {
     title: string,
+    children: React.ReactNode,
   }
 
 const Page: React.FC<PageProps> = ({children, title}) => {
