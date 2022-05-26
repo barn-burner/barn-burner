@@ -1,10 +1,14 @@
 import React from "react";
 
 import "./Landing.scss";
-import H2hComparison from "../components/h2hComparison";
+import { TeamPicker } from "../components";
 
 const Landing: React.FC = () => {
-  return <H2hComparison />;
+  return (
+    <div className="Landing">
+      <TeamPicker />
+    </div>
+  )
 };
 
 export default Landing;
