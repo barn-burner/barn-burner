@@ -15,7 +15,7 @@ const H2hComparison: React.FC = () => {
 
   async function fetchTeams() {
     const teamsRes = await fetch(
-      `http://barnburner-backend.herokuapp.com/teams`
+      `https://barnburner-backend.herokuapp.com/teams`
     );
     if (teamsRes.ok) {
       const teamsData = await teamsRes.json();
