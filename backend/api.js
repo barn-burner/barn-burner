@@ -59,6 +59,12 @@ expressApp.get('/teams', async (req, res) => {
             });
         } else {
             teamsSorted = Object.values(formattedTeamsObj);
+            // Sort alphabetically
+            teamsSorted.sort(function(a, b) {
+                var textA = a.name.toUpperCase();
+                var textB = b.name.toUpperCase();
+                return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+            });
         }
 
         res.json(teamsSorted);
