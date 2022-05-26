@@ -20,7 +20,7 @@ export interface SingleGameDataInterface {
     id: number,
     score: number
   },
-  gameDate: string,
+  gameDate: Date,
   gameId: number
   home: {
     id: number,

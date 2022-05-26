@@ -93,7 +93,8 @@ const GameList: React.FC<GameListProps> = ({ team1, team2, startDate, endDate, c
             {
               data.map((game: SingleGameDataInterface, index: number) => {
                   return(
-                    <Row key={index} onClick={() => goToGameDetails(game.gameId)} >
+                    <Row key={index} onClick={() => goToGameDetails(game.gameId)} className='gameItem'>
+                      <Col span={24} className="date"> {new Date(game.gameDate).toDateString()} </Col>
                       <Col span={10} className="home">
                         { isWinner(game.winnerId, game.home.id) && <span className="winner"> &gt;&gt; </span> }
                         <span className='teamName'>{generateNameFromId(game.home.id)}</span>
