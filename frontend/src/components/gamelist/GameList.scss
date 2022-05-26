@@ -1,7 +1,12 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;669&display=swap');
+body {
+  background-color: #515151 !important;
+}
+
 .allMatchesCard {
   // background-image: url("/src/images/backgroud.png");
   background-position: bottom right;
-  background: #f4f4f4 !important;
+  background: #082455 !important;
   margin-bottom: 24px !important;
   .ant-card {
     &-head {
@@ -9,16 +14,70 @@
       color: #fff;
     }
     &-body {
-      margin: 24px;
+      margin: 8px;
+      color: #fff;
+      h1 {
+        color: #fff;
+      }
     }
   }
 }
 
+.teamName {
+  font-family: 'Orbitron', sans-serif;
+  font-weight: bold;
+  font-size: 20px;
+  color: #fff
+}
+
+.awayTeam {
+  text-align: right;
+}
+
+.teamScore {
+  text-align: center;
+  background: #282826;
+  font-family: 'Orbitron', sans-serif;
+  font-weight: bold;
+  font-size: 24px;
+  color: yellow;
+  display: inline-block;
+  height: 32px;
+  width: 55px;
+  border: 1px solid #fff;
+  padding: 0 4px 0px 4px;
+  text-align: right;
+  vertical-align: middle;
+}
+
+.spacer {
+  padding: 3px;
+}
 
 .icon { 
-  height: 15px;
+  height: 36px;
+  padding: 0 4px 0 4px;
 }
 
-.winner {
-  font-weight: 700;
+.home {
+  text-align: right;
 }
+.vs {
+  text-align: center;
+}
+
+@media screen and (max-width: 768px) {
+  .teamName {
+    font-size: 12px;
+    color: #fff
+  }
+  .teamScore {
+    font-size: 16px;
+    width: 30px;
+  }
+  .icon { 
+    height: 20px;
+    padding: 0 4px 0 4px;
+}
+}
+
