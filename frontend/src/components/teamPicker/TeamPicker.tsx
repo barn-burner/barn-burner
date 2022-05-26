@@ -79,7 +79,7 @@ const TeamPicker: React.FC = () => {
       layout="vertical"
       form={form}
       onFinish={onFinish}
-      initialValues={{ team1: 1, team2: 2, seasonType: 'current' }}
+      initialValues={{ team1: 12, team2: 6, seasonType: 'current' }}
     >
       <Form.Item label="Team 1" name='team1'>
         <Select>
