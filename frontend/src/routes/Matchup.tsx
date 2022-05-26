@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Results, GameList } from '../components';
 import { TeamsInterface } from '../interfaces';
-import { getParams } from '../utils';
+import { getParams, getDateParams } from '../utils';
 
 import './Matchup.scss';
 
@@ -34,7 +34,7 @@ const Matchup: React.FC = () => {
   return (
     <div className='Matchup'>
       <Results team1={data[0]} team2={data[1]} />
-      <GameList team1={data[0]} team2={data[1]} />
+      <GameList team1={data[0]} team2={data[1]} startDate={getDateParams('start')} endDate={getDateParams('end')}/>
     </div>
   );
 }
