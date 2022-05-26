@@ -4,6 +4,9 @@ import * as moment from 'moment';
 
 import {
   Form,
+  Card,
+  Row,
+  Col,
   Button,
   Radio,
   Select,
@@ -73,42 +76,71 @@ const TeamPicker: React.FC = () => {
   if(isLoading || !teams) { return <span> loading </span> }
 
   return (
-    <Form
-      labelCol={{ span: 4 }}
-      wrapperCol={{ span: 14 }}
-      layout="vertical"
-      form={form}
-      onFinish={onFinish}
-      initialValues={{ team1: 12, team2: 6, seasonType: 'current' }}
-    >
-      <Form.Item label="Team 1" name='team1'>
-        <Select>
-          { teams.map((team) => (<Select.Option value={team.id} key={team.id}>{team.name}</Select.Option>)) }
-        </Select>
-      </Form.Item>
-      <Form.Item label="Team 2" name='team2'>
-        <Select>
-        { teams.map((team) => (<Select.Option value={team.id} key={team.id}>{team.name}</Select.Option>)) }
-        </Select>
-      </Form.Item>
-      <Form.Item label="Season Type" name="seasonType">
-        <Radio.Group>
-          <Radio.Button value="current">Current Season</Radio.Button>
-          {/* <Radio.Button value="all">All Seasons</Radio.Button> */}
-          <Radio.Button value="range">Date Range</Radio.Button>
-        </Radio.Group>
-      </Form.Item>
-      { seasonType==='range' && 
-        <Form.Item label='Date Range' name='dateRange'>
-          <RangePicker format={dateFormat}/>
-        </Form.Item>
-      }
-      <Form.Item>
-        <Button type="primary" htmlType="submit">
-          Submit
-        </Button>
-      </Form.Item>
-    </Form>
+    <Row justify="center" align="middle">
+      <Col xs={24} sm={24} md={20} lg={16}>
+        <Card className="teampickerCard">
+          <img className="logo" src={"/burnburner_logo.png"} />
+          <Form
+            labelCol={{ span: 4 }}
+            wrapperCol={{ span: 18 }}
+            layout="vertical"
+            form={form}
+            onFinish={onFinish}
+            initialValues={{ team1: 12, team2: 6, seasonType: 'current' }}
+          >
+            <Row justify="center">
+              <Col span={12}>
+               <h1>Pick your matchup</h1>
+              </Col>
+            </Row>
+            <Row justify="center">
+              <Col xs={24} sm={24} md={10} lg={6}>
+                <Form.Item name='team1' className="team1">
+                  <Select>
+                    { teams.map((team) => (<Select.Option value={team.id} key={team.id}>{team.name}</Select.Option>)) }
+                  </Select>
+                </Form.Item>
+              </Col>
+              <Col xs={24} sm={24} md={10} lg={6}>
+                <Form.Item name='team2'>
+                  <Select>
+                  { teams.map((team) => (<Select.Option value={team.id} key={team.id}>{team.name}</Select.Option>)) }
+                  </Select>
+                </Form.Item>
+              </Col>
+            </Row>
+            <Row justify="center">
+              <Col span={12}>
+               <h1>Season Type</h1>
+              </Col>
+            </Row>
+            <Row justify="center">
+              <Col span={12}>
+                <Form.Item name="seasonType"  className="center">
+                  <Radio.Group>
+                    <Radio.Button value="current">Current Season</Radio.Button>
+                    {/* <Radio.Button value="all">All Seasons</Radio.Button> */}
+                    <Radio.Button value="range">Date Range</Radio.Button>
+                  </Radio.Group>
+                </Form.Item>
+                { seasonType==='range' && 
+                  <Form.Item name='dateRange' className="center">
+                    <RangePicker format={dateFormat}/>
+                  </Form.Item>
+                }
+              </Col>
+            </Row>
+            <Row justify="center" >
+              <Form.Item>
+                <Button type="primary" htmlType="submit">
+                  GO!
+                </Button>
+              </Form.Item>
+            </Row>
+          </Form>
+        </Card>
+      </Col>
+    </Row>
   );
 };
 

@@ -3,11 +3,16 @@ body {
   background-color: #515151 !important;
 }
 
+.logo {
+  float: center;
+  width: 50%
+}
+
 .allMatchesCard {
   // background-image: url("/src/images/backgroud.png");
   background-position: bottom right;
   background: #082455 !important;
-  margin-bottom: 24px !important;
+  margin: 20px 0 20px 0 !important;
   .ant-card {
     &-head {
       background: #232323;
