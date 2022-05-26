@@ -1,67 +1,64 @@
 @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;669&display=swap');
 
-.resultsCard {
-  // background-image: url("/src/images/backgroud.png");
-  background-position: bottom right;
-  background: #082455 !important;
-  margin: 20px 0 20px 0 !important;
-
-  .ant-card {
-     background: #082455;
-    &-head {
-      background: #082455 !important;
+.resultsCard.ant-card {
+  background: #082455;
+  margin: 20px 0 10px 0 !important;
+  .ant-card-head {
+      background: #082455;
       color: #fff !important;
       font-family: 'Orbitron', sans-serif;
       font-weight: bold;
-      font-size: 34px;
+      font-size: 40px;
       border-color: #082455 !important;
       text-align: center;
-    }
-    &-body {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-
-    }
-    &-head-title {
-      font-size: 20px !important;
-      word-wrap: normal;
-      white-space: normal;
+    .ant-card-head-wrapper {
+      .ant-card-head-title {
+        font-size: 28px !important;
+        word-wrap: normal;
+        white-space: normal;
+        padding-bottom: 0;
+      }
     }
   }
-  .vs {
-    font-family: 'Orbitron', sans-serif;
-    font-weight: bold;
-    font-size: 1.5rem;
-    padding: 0 !important;
-    text-align: center;
-    color: #3c507b;
-    border: 1px solid #3c507b;
+  .ant-card-body {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: #082455;
+    padding-top: 0;
+    .ant-divider {
+      border-color: #3c507b;
+    }
+    .vs {
+      font-family: 'Orbitron', sans-serif;
+      font-weight: bold;
+      font-size: 1.4rem;
+      padding: 0 !important;
+      text-align: center;
+      color: #3c507b;
+      border: 1px solid #3c507b;
+    }
   }
 }
 
-
-.teamCard {
-  background: #f4f4f4;
-
-  .ant-card-head-title {
-    color: #fff;
-    font-size: 30px;
-  }
+.teamCard.ant-card {
   .ant-card-head {
     color: #000;
-    &-title {
-      font-weight: bold;
-      text-align: center;
-      font-size: 26px;
+    .ant-card-head-wrapper {
+      .ant-card-head-title {
+        color: #fff;
+        font-size: 20px !important;
+      }
     }
   }
-
-  .record {
-    margin-top: 5px;
-    color: #fff;
-    font-family: 'Orbitron', sans-serif;
+  .ant-card-body {
+    display: flex;
+    align-items: center;
+    min-height: 160px;
+    .record {
+      margin-top: 5px;
+      color: #fff;
+      font-family: 'Orbitron', sans-serif;
+    }
   }
 }
-
