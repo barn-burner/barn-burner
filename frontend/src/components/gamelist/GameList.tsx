@@ -71,6 +71,19 @@ const GameList: React.FC<GameListProps> = ({ team1, team2, startDate, endDate, c
     return winnerId === id ? true : false
   }
 
+  const generateScore = (homeScore: number, awayScore: number, date: Date) => {
+
+    const isFutureGame = date > new Date();
+
+    return (
+      <>
+        <span className="teamScore"> {isFutureGame ? '-' : homeScore} </span>
+        <span className="spacer"> </span>
+        <span className="teamScore"> {isFutureGame ? '-' : awayScore}  </span>
+      </>
+    )
+  }
+
   if(isError) { return <span> error </span> }
   if(isLoading || !data) { return <span> loading </span> }
 
@@ -101,9 +114,7 @@ const GameList: React.FC<GameListProps> = ({ team1, team2, startDate, endDate, c
                         <img className='icon' src={generateIconFromId(game.home.id)}/>
                       </Col>
                       <Col span={4} className="vs">
-                        <span className="teamScore"> {game.home.score} </span>
-                        <span className="spacer"> </span>
-                        <span className="teamScore"> {game.away.score} </span>
+                        { generateScore(game.home.score, game.away.score, new Date(game.gameDate)) }
                       </Col>
                       <Col span={10}>
                         <img className='icon' src={generateIconFromId(game.away.id)}/>
