@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from "react-router-dom";
 import classNames from 'classnames';
-import { Card, Row, Col } from 'antd';
+import { Card, Row, Col, Divider } from 'antd';
 
 import './GameList.scss';
 
@@ -91,16 +91,18 @@ const GameList: React.FC<GameListProps> = ({ team1, team2, startDate, endDate, c
   return (
 
     <Row justify="center">
-      <Col xs={24} sm={24} md={20} lg={16}>
+      <Col xs={22} sm={22} md={20} lg={16}>
         <Card className="allMatchesCard">
           <div className={classes} {...props}>
             <Row className={classes} {...props}>
               <Col span={10}>
-                <h1>HOME</h1>
+                <div className="homeAway">HOME</div>
+                <Divider dashed />
               </Col>
               <Col span={4}></Col>
               <Col span={10} style={{ height: '10%' }} className="awayTeam">
-                <h1>AWAY</h1>
+                <div className="homeAway">AWAY</div>
+                <Divider dashed />
               </Col>
             </Row>
             {
