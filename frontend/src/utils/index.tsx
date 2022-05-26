@@ -17,3 +17,11 @@ export const getParams = (input: string): string => {
 
   return q ? q : '1';
 }
+
+export const getDateParams = (input: string) => {
+  const queryString = window.location.search;
+  const params = new URLSearchParams(queryString);
+  const q = params.get(input);
+
+  return q || undefined;
+}

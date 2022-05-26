@@ -10,9 +10,11 @@ interface GameListProps {
   team1: TeamInterface,
   team2: TeamInterface
   className?: string,
+  startDate?: string,
+  endDate?: string,
 }
 
-const GameList: React.FC<GameListProps> = ({ team1, team2, className, ...props }) => {
+const GameList: React.FC<GameListProps> = ({ team1, team2, startDate, endDate, className, ...props }) => {
 
   const classes = classNames(
     'GameList',
@@ -24,8 +26,13 @@ const GameList: React.FC<GameListProps> = ({ team1, team2, className, ...props }
   const [isLoading, setIsLoading] = useState(true);
   const history = useHistory();
 
-  async function fetchHistoricalMatchups(team1ID: string, team2ID: string) {
-    const res = await fetch(`https://barnburner-backend.herokuapp.com/matchup/${team1ID}-${team2ID}`);
+  async function fetchHistoricalMatchups(team1ID: string, team2ID: string, startDate?: string, endDate?: string) {
+
+    const baseUrl = `https://barnburner-backend.herokuapp.com/matchup/`;
+    const teamUrl = `${team1ID}-${team2ID}`;
+    const dateUrl = `?start=${startDate}&end=${endDate}`;
+
+    const res = await fetch(`${baseUrl}${teamUrl}${startDate ? dateUrl : ''}`);
     if(res.ok) {
       const data = await res.json();
       setData(data);
@@ -37,7 +44,7 @@ const GameList: React.FC<GameListProps> = ({ team1, team2, className, ...props }
   }
 
   useEffect(() => {
-    fetchHistoricalMatchups(team1.id, team2.id);
+    fetchHistoricalMatchups(team1.id, team2.id, startDate, endDate);
   }, [])
 
   const generateNameFromId = (id: number) => {
