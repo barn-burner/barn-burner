@@ -77,7 +77,7 @@ const TeamPicker: React.FC = () => {
 
   return (
     <Row justify="center" align="middle">
-      <Col xs={24} sm={24} md={20} lg={16}>
+      <Col xs={22} sm={22} md={20} lg={16}>
         <Card className="teampickerCard">
           <img className="logo" src={"/burnburner_logo.png"} />
           <Form
@@ -94,15 +94,15 @@ const TeamPicker: React.FC = () => {
               </Col>
             </Row>
             <Row justify="center">
-              <Col xs={24} sm={24} md={10} lg={6}>
+              <Col xs={24} sm={24} md={12} lg={8}>
                 <Form.Item name='team1' className="team1">
                   <Select>
                     { teams.map((team) => (<Select.Option value={team.id} key={team.id}>{team.name}</Select.Option>)) }
                   </Select>
                 </Form.Item>
               </Col>
-              <Col xs={24} sm={24} md={10} lg={6}>
-                <Form.Item name='team2'>
+              <Col xs={24} sm={24} md={12} lg={8}>
+                <Form.Item name='team2' className="team2">
                   <Select>
                   { teams.map((team) => (<Select.Option value={team.id} key={team.id}>{team.name}</Select.Option>)) }
                   </Select>

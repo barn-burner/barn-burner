@@ -4,13 +4,13 @@
   background: #082455;
   margin: 20px 0 10px 0 !important;
   .ant-card-head {
-      background: #082455;
-      color: #fff !important;
-      font-family: 'Orbitron', sans-serif;
-      font-weight: bold;
-      font-size: 40px;
-      border-color: #082455 !important;
-      text-align: center;
+    background: #082455;
+    color: #fff !important;
+    font-family: 'Orbitron', sans-serif;
+    font-weight: bold;
+    font-size: 40px;
+    border-color: #082455 !important;
+    text-align: center;
     .ant-card-head-wrapper {
       .ant-card-head-title {
         font-size: 28px !important;
@@ -26,6 +26,9 @@
     align-items: center;
     background: #082455;
     padding-top: 0;
+    img {
+      width: 60%;
+    }
     .ant-divider {
       border-color: #3c507b;
     }

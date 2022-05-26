@@ -1,10 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;669&display=swap');
 
-body {
-  background-image: url("../../images/background.png");
-  background-size: cover;
-}
-
 .teampickerCard {
   background: #082455 !important;
   margin: 20px 0 20px 0 !important;
@@ -13,6 +8,10 @@ body {
     color: #fff;
     font-family: 'Orbitron', sans-serif;
     font-weight: bold;
+  }
+  .logo {
+    float: center;
+    width: 50%;
   }
 }
 
@@ -28,4 +27,13 @@ body {
 .team1 .ant-form-item-control {
   align-self: flex-end;
   width: 100%;
+}
+
+
+@media screen and (max-width: 768px) {
+  .team1 .ant-form-item-control,
+  .team2 .ant-form-item-control {
+    align-self: normal;
+    max-width: 100%;
+  }
 }
