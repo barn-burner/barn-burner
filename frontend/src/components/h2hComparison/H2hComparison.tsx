@@ -4,11 +4,12 @@ import { Dropdown, Menu, Space, Button, Row, Col } from "antd";
 
 import Page from "../page";
 import { TeamInterface } from "../../interfaces";
+import { SeasonSelector } from "../seasonSelector";
 
 const H2hComparison: React.FC = () => {
   const [teams, setTeams] = useState<TeamInterface[]>([]);
-  const [team1Id, setTeam1Id] = useState("");
-  const [team2Id, setTeam2Id] = useState("");
+  const [team1Id, setTeam1Id] = useState("1");
+  const [team2Id, setTeam2Id] = useState("2");
   const [isError, setIsError] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -37,7 +38,11 @@ const H2hComparison: React.FC = () => {
   };
 
   const menu1 = (
-    <Menu onClick={({ key }) => setTeam1Id(key)} items={teamItems()} />
+    <Menu
+      selectable
+      onClick={({ key }) => setTeam1Id(key)}
+      items={teamItems()}
+    />
   );
   const menu2 = (
     <Menu onClick={({ key }) => setTeam2Id(key)} items={teamItems()} />
@@ -69,7 +74,8 @@ const H2hComparison: React.FC = () => {
                 >
                   <a onClick={(e) => e.preventDefault()}>
                     <Space>
-                      Choose a NHL team <DownOutlined />
+                      {teams[Number(team1Id) - 1]?.name}
+                      <DownOutlined />
                     </Space>
                   </a>
                 </Dropdown>
@@ -82,13 +88,16 @@ const H2hComparison: React.FC = () => {
                 >
                   <a onClick={(e) => e.preventDefault()}>
                     <Space>
-                      Choose a NHL team <DownOutlined />
+                      {teams[Number(team2Id) - 1]?.name}
+                      {console.log(team2Id)}
+                      <DownOutlined />
                     </Space>
                   </a>
                 </Dropdown>
               </Col>
             </Row>
           </div>
+          <SeasonSelector />
           <Button>
             <a href={`/matchup?team1=${team1Id}&team2=${team2Id}`}>
               Compare two teams
