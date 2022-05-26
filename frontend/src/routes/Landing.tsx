@@ -1,12 +1,10 @@
-import React from 'react';
+import React from "react";
 
-import './Landing.scss';
+import "./Landing.scss";
+import H2hComparison from "../components/h2hComparison";
 
 const Landing: React.FC = () => {
-
-  return (
-    <span> landing </span>
-  );
+  return <H2hComparison />;
 };
 
 export default Landing;
