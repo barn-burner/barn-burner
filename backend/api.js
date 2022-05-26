@@ -61,8 +61,8 @@ expressApp.get('/teams', async (req, res) => {
             teamsSorted = Object.values(formattedTeamsObj);
             // Sort alphabetically
             teamsSorted.sort(function(a, b) {
-                var textA = a.name.toUpperCase();
-                var textB = b.name.toUpperCase();
+                let textA = a.name.toUpperCase();
+                let textB = b.name.toUpperCase();
                 return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
             });
         }
@@ -115,14 +115,16 @@ function getMatchupMetadata(matchups) {
                 gameId: match.gamePk,
                 gameDate: match.gameDate,
                 winnerId: winner.team.id,
+                gameType: match.gameType,
                 home: {
                     id: homeTeam.team.id,
-                    score: homeTeam.score,
+                    score: homeTeam.score
                 },
                 away: {
                     id: awayTeam.team.id,
-                    score: awayTeam.score,
-                }
+                    score: awayTeam.score
+                },
+                winnerId: homeTeam.score > awayTeam.score ? homeTeam.team.id : awayTeam.team.id
             });
         });
         return gameMetadata;
@@ -154,6 +156,7 @@ expressApp.get('/h2h/:one-:two', async (req, res) => {
 function getMatchupStats(matchups, idOne, idTwo) {
     let ratio = {
         [idOne]: {
+            teamId: idOne,
             overall: {
                 wins: 0, losses: 0
             },
@@ -161,10 +164,17 @@ function getMatchupStats(matchups, idOne, idTwo) {
                 wins: 0, losses: 0
             },
             away: {
+                wins: 0, losses: 0
+            },
+            regular: {
+                wins: 0, losses: 0
+            },
+            playoffs: {
                 wins: 0, losses: 0
             }
         },
         [idTwo]: {
+            teamId: idTwo,
             overall: {
                 wins: 0, losses: 0
             },
@@ -173,31 +183,57 @@ function getMatchupStats(matchups, idOne, idTwo) {
             },
             away: {
                 wins: 0, losses: 0
+            },
+            regular: {
+                wins: 0, losses: 0
+            },
+            playoffs: {
+                wins: 0, losses: 0
             }
         }
-    }
+    };
 
     if (matchups.length > 0) {
         matchups.map((match) => {
-            let homeTeam = match.teams.home;
-            let awayTeam = match.teams.away;
-            if (homeTeam.score > awayTeam.score) {
-                // home team wins, away team loses
-                ratio[homeTeam.team.id].home.wins++;
-                ratio[awayTeam.team.id].away.losses++;
-            } else {
-                // away team wins, home team loses
-                ratio[awayTeam.team.id].away.wins++;
-                ratio[homeTeam.team.id].home.losses++;
+            if (match.status.statusCode === '7') { // Status Code 7 Indicates a game was actually completed (FINAL)
+                let homeTeam = match.teams.home;
+                let awayTeam = match.teams.away;
+                if (homeTeam.score > awayTeam.score) {
+                    // home team wins, away team loses
+                    ratio[homeTeam.team.id].home.wins++;
+                    ratio[awayTeam.team.id].away.losses++;
+                    if (match.gameType === 'R') {
+                        ratio[homeTeam.team.id].regular.wins++;
+                        ratio[awayTeam.team.id].regular.losses++;
+                    }
+
+                    if (match.gameType === 'P') {
+                        ratio[homeTeam.team.id].playoffs.wins++;
+                        ratio[awayTeam.team.id].playoffs.losses++;
+                    }
+                } else {
+                    // away team wins, home team loses
+                    ratio[awayTeam.team.id].away.wins++;
+                    ratio[homeTeam.team.id].home.losses++;
+                    if (match.gameType === 'R') {
+                        ratio[awayTeam.team.id].regular.wins++;
+                        ratio[homeTeam.team.id].regular.losses++;
+                    }
+
+                    if (match.gameType === 'P') {
+                        ratio[awayTeam.team.id].playoffs.wins++;
+                        ratio[homeTeam.team.id].playoffs.losses++;
+                    }
+                }
+
+                // Overall = home + away wins and losses
+                ratio[idOne].overall.wins = ratio[idOne].home.wins + ratio[idOne].away.wins;
+                ratio[idOne].overall.losses = ratio[idOne].home.losses + ratio[idOne].away.losses;
+
+                // The second team is the inverse of the first
+                ratio[idTwo].overall.wins = ratio[idOne].overall.losses;
+                ratio[idTwo].overall.losses = ratio[idOne].overall.wins;
             }
-
-            // Overall = home + away wins and losses
-            ratio[idOne].overall.wins = ratio[idOne].home.wins + ratio[idOne].away.wins;
-            ratio[idOne].overall.losses = ratio[idOne].home.losses + ratio[idOne].away.losses;
-
-            // The second team is the inverse of the first
-            ratio[idTwo].overall.wins = ratio[idOne].overall.losses;
-            ratio[idTwo].overall.losses = ratio[idOne].overall.wins;
         });
         // Lets us maintain the correct order of the array. Id one is always [0] and id two is always [1]
         let finalScores = [];
