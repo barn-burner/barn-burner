@@ -1,27 +1,54 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;669&display=swap');
+
 .resultsCard {
   // background-image: url("/src/images/backgroud.png");
   background-position: bottom right;
-  background: #f4f4f4 !important;
-  margin-bottom: 24px !important;
+  background: #082455 !important;
+  margin: 20px 0 20px 0 !important;
+
   .ant-card {
+     background: #082455;
     &-head {
-      background: #232323;
-      color: #fff;
+      background: #082455 !important;
+      color: #fff !important;
+      font-family: 'Orbitron', sans-serif;
+      font-weight: bold;
+      font-size: 34px;
+      border-color: #082455 !important;
+      text-align: center;
     }
     &-body {
-      margin: 24px;
+      margin: 16px;
+
     }
+    &-head-title {
+      font-size: 20px !important;
+    }
+  }
+  .vs {
+    font-weight: bold;
+    font-size: 50px;
+    padding: 0 !important;
+    text-align: center;
+    color: #3c507b;
+    border: 1px solid #3c507b;
   }
 }
 
 
 .teamCard {
   background: #f4f4f4;
+
+  .ant-card-head-title {
+    color: #fff;
+    font-size: 30px;
+  }
   .ant-card-head {
     color: #000;
     &-title {
       font-weight: bold;
       text-align: center;
+      font-size: 26px;
     }
   }
   img { 
@@ -29,9 +56,3 @@
   }
 }
 
-.vs {
-  padding: 0 !important;
-  img {
-    width:100%;
-  }
-}

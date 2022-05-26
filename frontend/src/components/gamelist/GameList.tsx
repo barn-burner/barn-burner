@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from "react-router-dom";
 import classNames from 'classnames';
-import { Card, Table, Row, Col } from 'antd';
+import { Card, Row, Col } from 'antd';
 
 import './GameList.scss';
 
@@ -68,33 +68,34 @@ const GameList: React.FC<GameListProps> = ({ team1, team2, className, ...props }
 
     <Row justify="center">
       <Col xs={24} sm={24} md={20} lg={16}>
-        <Card title="All MATCHUPS" className="allMatchesCard">
+        <Card className="allMatchesCard">
           <div className={classes} {...props}>
             <Row className={classes} {...props}>
-              <Col span={11}>
-                Home
+              <Col span={10}>
+                <h1>HOME</h1>
               </Col>
-              <Col span={2}></Col>
-              <Col span={11}>
-                Away
+              <Col span={4}></Col>
+              <Col span={10} style={{ height: '10%' }} className="awayTeam">
+                <h1>AWAY</h1>
               </Col>
             </Row>
             {
               data.map((game: SingleGameDataInterface, index: number) => {
                   return(
-                    <Row key={index} onClick={() => goToGameDetails(game.gameId)}>
-                      <Col span={11} className={game.winnerId === game.home.id ? 'winner' : 'loser'}>
-                        <img className='icon' src={generateIconFromId(game.home.id)}/>
+                    <Row key={index} onClick={() => goToGameDetails(game.gameId)} >
+                      <Col span={10} className={game.winnerId === game.home.id ? 'home winner' : 'home loser'} >
                         <span className='teamName'>{generateNameFromId(game.home.id)}</span>
-                        <span className='teamScore'>{game.home.score}</span>
+                        <img className='icon' src={generateIconFromId(game.home.id)}/>
                       </Col>
-                      <Col span={2}>
-                        <span className='vs'> - </span>
+                      <Col span={4} className="vs">
+                        <span className="teamScore"> {game.home.score} </span>
+                        <span className="spacer"> </span>
+                        <span className="teamScore"> {game.away.score} </span>
                       </Col>
-                      <Col span={11} className={game.winnerId === game.away.id ? 'winner' : 'loser'}>
-                        <span className='teamScore'>{game.away.score}</span>
+                      <Col span={10} className={game.winnerId === game.away.id ? 'away winner' : 'away loser'} >
+                          <img className='icon' src={generateIconFromId(game.away.id)}/>
                         <span className='teamName'>{generateNameFromId(game.away.id)}</span>
-                        <img className='icon' src={generateIconFromId(game.away.id)}/>
+                        
                       </Col>
                     </Row>
                   )

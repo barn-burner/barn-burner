@@ -20,11 +20,11 @@ const Results: React.FC<ResultsProps> = ({ team1, team2, className, ...props }) 
     <>
       <Row justify="center">
         <Col xs={24} sm={24} md={20} lg={16}>
-          <Card className="resultsCard" title="MATCHUP">
+          <Card className="resultsCard" title="MATCHUP!">
             <Row gutter={24} justify="center" align="middle">
               <Col xs={24} sm={24} md={10} lg={10} xl={10}>
                 <Card
-                  // bordered={false}
+                  bordered={false}
                   type="inner" 
                   title={team1?.name} 
                   className="teamCard"
@@ -32,12 +32,12 @@ const Results: React.FC<ResultsProps> = ({ team1, team2, className, ...props }) 
                   <img src={team1?.logoUrl} />
                 </Card>
               </Col>
-              <Col xs={2} sm={2} md={2} lg={2} xl={2} className="vs">
-                <img src={"/vs.png"} />
+              <Col xs={2} sm={3} md={3} lg={3} xl={3} className="vs" >
+                VS
               </Col>
               <Col xs={24} sm={24} md={10} lg={10} xl={10}>
                 <Card
-                  // bordered={false}
+                  bordered={false}
                   type="inner" 
                   title={team2?.name} 
                   className="teamCard"
