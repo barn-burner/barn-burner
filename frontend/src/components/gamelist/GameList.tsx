@@ -60,6 +60,10 @@ const GameList: React.FC<GameListProps> = ({ team1, team2, className, ...props }
     history.push(`/game?id=${gameId}`);
   }
 
+  const isWinner = (winnerId: number, id: number) => {
+    return winnerId === id ? true : false
+  }
+
   if(isError) { return <span> error </span> }
   if(isLoading || !data) { return <span> loading </span> }
 
@@ -83,7 +87,8 @@ const GameList: React.FC<GameListProps> = ({ team1, team2, className, ...props }
               data.map((game: SingleGameDataInterface, index: number) => {
                   return(
                     <Row key={index} onClick={() => goToGameDetails(game.gameId)} >
-                      <Col span={10} className={game.winnerId === game.home.id ? 'home winner' : 'home loser'} >
+                      <Col span={10}>
+                        { isWinner(game.winnerId, game.home.id) && <span> winner </span> }
                         <span className='teamName'>{generateNameFromId(game.home.id)}</span>
                         <img className='icon' src={generateIconFromId(game.home.id)}/>
                       </Col>
@@ -92,8 +97,9 @@ const GameList: React.FC<GameListProps> = ({ team1, team2, className, ...props }
                         <span className="spacer"> </span>
                         <span className="teamScore"> {game.away.score} </span>
                       </Col>
-                      <Col span={10} className={game.winnerId === game.away.id ? 'away winner' : 'away loser'} >
-                          <img className='icon' src={generateIconFromId(game.away.id)}/>
+                      <Col span={10}>
+                        { isWinner(game.winnerId, game.away.id) && <span> winner </span> }
+                        <img className='icon' src={generateIconFromId(game.away.id)}/>
                         <span className='teamName'>{generateNameFromId(game.away.id)}</span>
                         
                       </Col>
