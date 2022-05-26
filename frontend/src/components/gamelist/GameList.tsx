@@ -87,8 +87,8 @@ const GameList: React.FC<GameListProps> = ({ team1, team2, className, ...props }
               data.map((game: SingleGameDataInterface, index: number) => {
                   return(
                     <Row key={index} onClick={() => goToGameDetails(game.gameId)} >
-                      <Col span={10}>
-                        { isWinner(game.winnerId, game.home.id) && <span> winner </span> }
+                      <Col span={10} className="home">
+                        { isWinner(game.winnerId, game.home.id) && <span className="winner"> &gt;&gt; </span> }
                         <span className='teamName'>{generateNameFromId(game.home.id)}</span>
                         <img className='icon' src={generateIconFromId(game.home.id)}/>
                       </Col>
@@ -98,10 +98,9 @@ const GameList: React.FC<GameListProps> = ({ team1, team2, className, ...props }
                         <span className="teamScore"> {game.away.score} </span>
                       </Col>
                       <Col span={10}>
-                        { isWinner(game.winnerId, game.away.id) && <span> winner </span> }
                         <img className='icon' src={generateIconFromId(game.away.id)}/>
                         <span className='teamName'>{generateNameFromId(game.away.id)}</span>
-                        
+                        { isWinner(game.winnerId, game.away.id) && <span className="winner"> &lt;&lt; </span> }     
                       </Col>
                     </Row>
                   )
