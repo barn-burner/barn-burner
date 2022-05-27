@@ -1,10 +1,11 @@
 .resultsCard.ant-card {
   .ant-card-head {
-    border-color: #082455 !important;
+    border: none;
     font-weight: bold;
     text-align: center;
     .ant-card-head-wrapper {
       .ant-card-head-title {
+        font-color: #ccc;
         font-size: 36px;
         padding-bottom: 0;
         white-space: normal;
@@ -21,11 +22,11 @@
       width: 60%;
     }
     .ant-divider {
-      border-color: #3c507b;
+      border-color: #ccc;
     }
     .vs {
-      border: 1px solid #3c507b;
-      color: #3c507b;
+      border: 1px solid #ccc;
+      color: #ccc;
       font-size: 1.4rem;
       font-weight: bold;
       padding: 0 !important;
@@ -35,6 +36,8 @@
 }
 
 .teamCard.ant-card {
+  background-image: none;
+  background: none;
   border: 0;
   .ant-card-head {
     .ant-card-head-wrapper {
