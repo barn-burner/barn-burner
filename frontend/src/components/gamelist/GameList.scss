@@ -1,34 +1,28 @@
-@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;669&display=swap');
-
 .allMatchesCard.ant-card {
-  background: #082455;
-  margin: 20px 0 20px 0;
   .ant-card-body {
+    color: #fff;
     margin: 8px;
     padding-top: 8px;
-    color: #fff;
     .ant-divider {
       border-color: #3c507b;
     }
     .homeAway {
-      font-family: 'Orbitron', sans-serif;
+      color: #3c507b;
       font-weight: bold;
       font-size: 42px;
-      color: #3c507b;
     }
     .date {
-      font-size: 12px;
       color: #fff;
+      font-size: 12px;
+      margin-bottom: 5px;
       opacity: .4;
       text-align: center;
       width: 100%;
-      margin-bottom: 5px;
     }
     .teamName {
-      font-family: 'Orbitron', sans-serif;
+      color: #fff;
       font-weight: bold;
       font-size: 20px;
-      color: #fff
     }
     .logo {
       float: center;
@@ -38,19 +32,17 @@
       display: flex;
       justify-content: center;
       .teamScore {
-        text-align: center;
         background: #282826;
-        font-family: 'Orbitron', sans-serif;
-        font-weight: bold;
-        font-size: 24px;
+        border: 1px solid #fff;
         color: yellow;
         display: inline-block;
+        font-weight: bold;
+        font-size: 24px;
         height: 32px;
-        width: 55px;
-        border: 1px solid #fff;
+        line-height: 26px;
         padding: 0 4px 0px 4px;
         text-align: right;
-        line-height: 26px;
+        width: 55px;
       }
       .spacer {
         padding: 3px;
@@ -67,9 +59,9 @@
       text-align: right;
     }
     .winner {
+      color: yellow;
       font-size: 24px;
       font-weight: bold;
-      color: yellow;
     }
     .gameItem {
       margin-bottom: 12px;
@@ -122,4 +114,3 @@
     }
   }
 }
-

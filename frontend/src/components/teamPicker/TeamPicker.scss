@@ -1,34 +1,20 @@
-@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;669&display=swap');
-
 .teampickerCard {
-  background: #082455 !important;
-  margin: 20px 0 20px 0 !important;
   text-align: center;
-  h1 {
-    color: #fff;
-    font-family: 'Orbitron', sans-serif;
-    font-weight: bold;
-  }
   .logo {
     float: center;
     width: 50%;
   }
 }
 
-.ant-form-item-label > label {
-  color: #fff !important;
-}
-
 .center {
-  justify-content: center;
   align-items: center;
+  justify-content: center;
 }
 
 .team1 .ant-form-item-control {
   align-self: flex-end;
   width: 100%;
 }
-
 
 @media screen and (max-width: 768px) {
   .team1 .ant-form-item-control,
