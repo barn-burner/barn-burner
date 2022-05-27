@@ -93,12 +93,35 @@ expressApp.get('/matchup/:one-:two', async (req, res) => {
     let teamTwo = (+req.params.two);
     let start = req.query.start ? req.query.start : seasonStart;
     let end = req.query.end ? req.query.end : seasonEnd;
-    let sharedSchedule = await getCompareSchedules(teamOne, teamTwo, start, end);
-    let matchups = getScheduleMatchups(sharedSchedule, teamOne, teamTwo);
-    let metadata = getMatchupMetadata(matchups);
+    if (req.query.allTime === '') {
+        let allDates = await getAllTimeSchedule(teamOne, teamTwo);
+        let matchups = getScheduleMatchups(allDates, teamOne, teamTwo);
+        let metadata = getMatchupMetadata(matchups);
+        res.json(metadata);
+    } else {
+        let sharedSchedule = await getCompareSchedules(teamOne, teamTwo, start, end);
+        let matchups = getScheduleMatchups(sharedSchedule, teamOne, teamTwo);
+        let metadata = getMatchupMetadata(matchups);
+        res.json(metadata);
+    }
 
-    res.json(metadata);
 });
+
+async function getAllTimeSchedule(teamOne, teamTwo) {
+    let allDates = [];
+    // We're only supporting salary cap era (2005-present) and the api is most efficient by season instead of date
+    for (let i = 2005; i <= 2021; i += 1) {
+        let startYear = i;
+        let endYear = (i + 1);
+        console.log("season: " + `${startYear}${endYear}`);
+        let currentDates = (await getSeasonSchedule(teamOne, teamTwo, startYear, endYear));
+        // Shape the data to one giant blob of dates
+        currentDates.map((date) => {
+            allDates.push(date);
+        });
+    }
+    return allDates;
+}
 
 // Returns specifc metadata about a given matchup
 function getMatchupMetadata(matchups) {
@@ -146,17 +169,7 @@ expressApp.get('/h2h/:one-:two', async (req, res) => {
     let end = req.query.end ? req.query.end : seasonEnd;
     let allDates = [];
     if (req.query.allTime === '') {
-        // We're only supporting salary cap era (2005-present) and the api is most efficient by season instead of date
-        for (let i = 2005; i <= 2021; i += 1) {
-            let startYear = i;
-            let endYear = (i + 1);
-            console.log("season: " + `${startYear}${endYear}`);
-            let currentDates = (await getSeasonSchedule(teamOne, teamTwo, startYear, endYear));
-            // Shape the data to one giant blob of dates
-            currentDates.map((date) => {
-                allDates.push(date);
-            });
-        }
+        let allDates = await getAllTimeSchedule(teamOne, teamTwo);
         let matchups = getScheduleMatchups(allDates, teamOne, teamTwo);
         let matchupStats = getMatchupStats(matchups, teamOne, teamTwo);
         res.json(matchupStats);
