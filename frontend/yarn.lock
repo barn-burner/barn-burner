@@ -5246,6 +5246,13 @@ extend-shallow@^3.0.0, extend-shallow@^3.0.2:
     assign-symbols "^1.0.0"
     is-extendable "^1.0.1"
 
+external-svg-loader@^1.4.2:
+  version "1.4.2"
+  resolved "https://registry.yarnpkg.com/external-svg-loader/-/external-svg-loader-1.4.2.tgz#b112a56e4093b94e25b48bd94e4e4ed15fa8c2ac"
+  integrity sha512-qF2nJPIR79sHZwTfpoUgonBngPpph2ecJJUZRPJommK7OZ7DFW2K9meOne21kfB8i9SvEWSnJ24ik7hul7QguA==
+  dependencies:
+    idb-keyval "^3.2.0"
+
 extglob@^2.0.4:
   version "2.0.4"
   resolved "https://registry.yarnpkg.com/extglob/-/extglob-2.0.4.tgz#ad00fe4dc612a9232e8718711dc5cb5ab0285543"
@@ -6085,6 +6092,11 @@ icss-utils@^4.0.0, icss-utils@^4.1.1:
   integrity sha512-4aFq7wvWyMHKgxsH8QQtGpvbASCf+eM3wPRLI6R+MgAnTCZ6STYsRvttLvRWK0Nfif5piF394St3HeJDaljGPA==
   dependencies:
     postcss "^7.0.14"
+
+idb-keyval@^3.2.0:
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/idb-keyval/-/idb-keyval-3.2.0.tgz#cbbf354deb5684b6cdc84376294fc05932845bd6"
+  integrity sha512-slx8Q6oywCCSfKgPgL0sEsXtPVnSbTLWpyiDcu6msHOyKOLari1TD1qocXVCft80umnkk3/Qqh3lwoFt8T/BPQ==
 
 identity-obj-proxy@3.0.0:
   version "3.0.0"

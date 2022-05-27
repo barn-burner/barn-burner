@@ -61,9 +61,17 @@
       color: yellow;
       font-size: 24px;
       font-weight: bold;
+      margin: 0 5px;
     }
     .gameItem {
       margin-bottom: 12px;
+    }
+    .gameCol {
+      display: flex;
+      align-items: center;
+      &.home {
+        justify-content: end;
+      }
     }
   }
 }
