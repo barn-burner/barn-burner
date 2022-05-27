@@ -33,3 +33,54 @@ h1, h2, .ant-card-head-title, .record {
 .ant-card-head {
   background: transparent !important;
 }
+
+
+/* 
+demo of the code found at: http://visualidiot.com/articles/css3 
+browser support: IE10+, Firefox 5+, Chrome, Safari 4+
+*/
+
+.marquee {
+  left: 0; 
+  right: 0; 
+  height: 40px;
+  width: 420px;
+  margin-left: auto; 
+  margin-right: auto; 
+  overflow: hidden;
+  background: black;
+  border: 2px solid #fff;
+  position: relative;
+  text-align: center;
+}
+
+.marquee div {
+  color: yellow;
+  display: block;
+  width: 900%;
+  height: 45px;
+  font-size: 1.3rem;
+  position: absolute;
+  overflow: hidden;
+  animation: marquee 14s linear infinite;
+}
+
+.marquee span {
+  float: left;
+  width: calc(1 / 3);
+}
+
+@keyframes marquee {
+  0% {
+    left: 0;
+  }
+  100% {
+    left: -380%;
+  }
+}
+
+.marquee:hover div {
+  -webkit-animation-play-state: paused; /* Safari 4.0 - 8.0 */
+  animation-play-state: paused;
+}
+

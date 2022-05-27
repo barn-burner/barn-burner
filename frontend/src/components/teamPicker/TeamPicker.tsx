@@ -150,6 +150,19 @@ const TeamPicker: React.FC = () => {
                 </Button>
               </Form.Item>
             </Row>
+
+            <Row justify="center">
+              <Col span={24} className="center">
+                <div className="marquee">
+                  <div>
+                    <span>&nbsp;&nbsp;&nbsp;ConsoleDot Hackathon Q2 2022. 'Barn Burner' by...Aneela Ch</span>
+                    <span>agarlamudi.....Blake Holifield.....Eric Winchell.....</span>
+                    <span>Richard Brantley and.....Ryan Long.</span>
+                  </div>
+                </div>
+              </Col>
+            </Row>
+
           </Form>
         </Card>
       </Col>
