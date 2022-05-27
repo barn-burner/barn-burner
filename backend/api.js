@@ -96,6 +96,7 @@ expressApp.get('/matchup/:one-:two', async (req, res) => {
     if (req.query.allTime === '') {
         let allDates = await getAllTimeSchedule(teamOne, teamTwo);
         // convert the array of arrays in allDates down to one array of dates
+        console.log("All dates fetched");
         let matchups = getScheduleMatchups(allDates.concat.apply([], allDates), teamOne, teamTwo);
         let metadata = getMatchupMetadata(matchups);
         res.json(metadata);
@@ -110,8 +111,9 @@ expressApp.get('/matchup/:one-:two', async (req, res) => {
 
 async function getAllTimeSchedule(teamOne, teamTwo) {
     let allDates = [];
-    // We're only supporting salary cap era (2005-present) and the api is most efficient by season instead of date
-    for (let i = 2005; i <= 2021; i += 1) {
+    // The NHL officially started in 1917 and the api is most efficient by season instead of date
+    // TODO: Update 2021 to fetch current year
+    for (let i = 1917; i <= 2021; i += 1) {
         let startYear = i;
         let endYear = (i + 1);
         console.log('season: ' + `${startYear}${endYear}`);
@@ -169,6 +171,7 @@ expressApp.get('/h2h/:one-:two', async (req, res) => {
     let end = req.query.end ? req.query.end : seasonEnd;
     if (req.query.allTime === '') {
         let allDates = await getAllTimeSchedule(teamOne, teamTwo);
+        console.log("All dates fetched");
         // convert the array of arrays in allDates down to one array of dates
         let matchups = getScheduleMatchups(allDates.concat.apply([], allDates), teamOne, teamTwo);
         let matchupStats = getMatchupStats(matchups, teamOne, teamTwo);
