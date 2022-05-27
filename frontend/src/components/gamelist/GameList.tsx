@@ -26,7 +26,7 @@ const GameList: React.FC<GameListProps> = ({ team1, team2, startDate, endDate, c
   const [isLoading, setIsLoading] = useState(true);
   const history = useHistory();
 
-  async function fetchHistoricalMatchups(team1ID: string, team2ID: string, startDate?: string, endDate?: string) {
+  async function fetchHistoricalMatchups(team1ID: number, team2ID: number, startDate?: string, endDate?: string) {
 
     const baseUrl = `https://barnburner-backend.herokuapp.com/matchup/`;
     const teamUrl = `${team1ID}-${team2ID}`;
@@ -48,7 +48,7 @@ const GameList: React.FC<GameListProps> = ({ team1, team2, startDate, endDate, c
   }, [])
 
   const generateNameFromId = (id: number) => {
-    if(id.toString() == team1.id) {
+    if(id == team1.id) {
       return team1.name;
     } else {
       return team2.name;
@@ -56,7 +56,7 @@ const GameList: React.FC<GameListProps> = ({ team1, team2, startDate, endDate, c
   }
 
   const generateIconFromId = (id: number) => {
-    if(id.toString() == team1.id) {
+    if(id == team1.id) {
       return team1.logoUrl;
     } else {
       return team2.logoUrl;

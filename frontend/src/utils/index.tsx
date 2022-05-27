@@ -10,12 +10,12 @@ export const calculateAverage = (input: number[]):number => {
   return avgRounded;
 };
 
-export const getParams = (input: string): string => {
+export const getParams = (input: string): number => {
   const queryString = window.location.search;
   const params = new URLSearchParams(queryString);
   const q = params.get(input);
 
-  return q ? q : '1';
+  return q ? parseInt(q) : 1;
 }
 
 export const getDateParams = (input: string) => {

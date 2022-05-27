@@ -4,7 +4,7 @@ export interface LogoInterface {
 
 export interface TeamInterface {
   abbreviation: string,
-  id: string,
+  id: number,
   locationName: string,
   name: string,
   teamName: string,

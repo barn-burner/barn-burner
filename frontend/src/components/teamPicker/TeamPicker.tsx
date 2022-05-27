@@ -28,8 +28,11 @@ const TeamPicker: React.FC = () => {
   const [teams, setTeams] = useState<TeamInterface[]>([]);
   const [isError, setIsError] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [isValidated, setIsValidated] = useState(true);
   const [form] = Form.useForm();
   const seasonType = Form.useWatch('seasonType', form);
+  const team1 = Form.useWatch('team1', form);
+  const team2 = Form.useWatch('team2', form);
   const history = useHistory();
 
   const { RangePicker } = DatePicker;
@@ -69,8 +72,18 @@ const TeamPicker: React.FC = () => {
     const teamString = `?team1=${values.team1}&team2=${values.team2}`
     const dateString = values.dateRange ? `&start=${values.dateRange[0]}&end=${values.dateRange[1]}` : '';
   
-    history.push(`${baseUrl}${teamString}${dateString}`);
+    checkAllValidation() ? history.push(`${baseUrl}${teamString}${dateString}`) : console.error('Form is not validated');
   };
+
+  const validateTeamComparison = () => {
+    return team1 === team2 ? 'error' : 'success'
+  }
+
+  const checkAllValidation = () => {
+    return (
+      validateTeamComparison() === 'success'
+    )
+  }
 
   if(isError) { return <span> error </span> }
   if(isLoading || !teams) { return <span> loading </span> }
@@ -95,14 +108,14 @@ const TeamPicker: React.FC = () => {
             </Row>
             <Row justify="center">
               <Col xs={24} sm={24} md={12} lg={8}>
-                <Form.Item name='team1' className="team1">
+                <Form.Item name='team1' className="team1" validateStatus={validateTeamComparison()}>
                   <Select>
                     { teams.map((team) => (<Select.Option value={team.id} key={team.id}>{team.name}</Select.Option>)) }
                   </Select>
                 </Form.Item>
               </Col>
               <Col xs={24} sm={24} md={12} lg={8}>
-                <Form.Item name='team2' className="team2">
+                <Form.Item name='team2' className="team2" validateStatus={validateTeamComparison()} help="Teams cannot be the same">
                   <Select>
                   { teams.map((team) => (<Select.Option value={team.id} key={team.id}>{team.name}</Select.Option>)) }
                   </Select>
@@ -124,7 +137,7 @@ const TeamPicker: React.FC = () => {
                   </Radio.Group>
                 </Form.Item>
                 { seasonType==='range' && 
-                  <Form.Item name='dateRange' className="center">
+                  <Form.Item name='dateRange' className="center" rules={[{ required: seasonType==='range', message: 'You must select a date range'}]}>
                     <RangePicker format={dateFormat}/>
                   </Form.Item>
                 }
