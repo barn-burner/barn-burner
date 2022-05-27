@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useHistory } from "react-router-dom";
 import classNames from 'classnames';
 import { Card, Row, Col, Divider } from 'antd';
-
+import { OutlineSVG } from '..';
 import './GameList.scss';
 
 import { TeamInterface, SingleGameDataInterface } from '../../interfaces';
@@ -110,16 +110,17 @@ const GameList: React.FC<GameListProps> = ({ team1, team2, startDate, endDate, c
                   return(
                     <Row key={index} onClick={() => goToGameDetails(game.gameId)} className='gameItem'>
                       <Col span={24} className="date"> {new Date(game.gameDate).toDateString()} </Col>
-                      <Col span={10} className="home">
+                      <Col span={10} className="home gameCol">
                         { isWinner(game.winnerId, game.home.id) && <span className="winner"> &gt;&gt; </span> }
                         <span className='teamName'>{generateNameFromId(game.home.id)}</span>
-                        <img className='icon' src={generateIconFromId(game.home.id)}/>
+                        <OutlineSVG src={generateIconFromId(game.home.id)} className='icon' width={5}/>
+
                       </Col>
                       <Col span={4} className="vs">
                         { generateScore(game.home.score, game.away.score, new Date(game.gameDate)) }
                       </Col>
-                      <Col span={10}>
-                        <img className='icon' src={generateIconFromId(game.away.id)}/>
+                      <Col span={10} className='gameCol'>
+                        <OutlineSVG src={generateIconFromId(game.away.id)} className='icon' width={5}/>
                         <span className='teamName'>{generateNameFromId(game.away.id)}</span>
                         { isWinner(game.winnerId, game.away.id) && <span className="winner"> &lt;&lt; </span> }     
                       </Col>

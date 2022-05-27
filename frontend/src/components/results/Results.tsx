@@ -1,6 +1,7 @@
 import React from 'react';
 import classNames from 'classnames';
 import { Card, Divider, Row, Col } from 'antd';
+import { OutlineSVG } from '..';
 
 import './Results.scss';
 import { TeamInterface, h2hDetailsInterface } from '../../interfaces';
@@ -23,7 +24,6 @@ const Results: React.FC<ResultsProps> = ({ team1, team2, team1Record, team2Recor
   }
 
   const winner = team1Record.wins > team2Record.wins ? team1 : team2;
-  console.log('winner', winner);
 
   return (
     <>
@@ -39,7 +39,7 @@ const Results: React.FC<ResultsProps> = ({ team1, team2, team1Record, team2Recor
                   title={team1?.name} 
                   className="teamCard"
                 >
-                  <img src={team1?.logoUrl} />
+                   <OutlineSVG src={team1?.logoUrl}/>
                   <span className='record'> {generateRecordString(team1Record)} </span>
                 </Card>
               </Col>
@@ -53,7 +53,7 @@ const Results: React.FC<ResultsProps> = ({ team1, team2, team1Record, team2Recor
                   title={team2?.name} 
                   className="teamCard"
                 >
-                  {<img src={team2?.logoUrl} />}
+                  <OutlineSVG src={team2?.logoUrl}/>
                   <span className='record'> {generateRecordString(team2Record)} </span>
                 </Card>
               </Col>
