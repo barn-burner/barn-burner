@@ -113,13 +113,14 @@ async function getAllTimeSchedule(teamOne, teamTwo) {
     for (let i = 2005; i <= 2021; i += 1) {
         let startYear = i;
         let endYear = (i + 1);
-        console.log("season: " + `${startYear}${endYear}`);
+        console.log('season: ' + `${startYear}${endYear}`);
         let currentDates = (await getSeasonSchedule(teamOne, teamTwo, startYear, endYear));
         // Shape the data to one giant blob of dates
         currentDates.map((date) => {
             allDates.push(date);
         });
     }
+
     return allDates;
 }
 
@@ -167,7 +168,6 @@ expressApp.get('/h2h/:one-:two', async (req, res) => {
     let teamTwo = (+req.params.two);
     let start = req.query.start ? req.query.start : seasonStart;
     let end = req.query.end ? req.query.end : seasonEnd;
-    let allDates = [];
     if (req.query.allTime === '') {
         let allDates = await getAllTimeSchedule(teamOne, teamTwo);
         let matchups = getScheduleMatchups(allDates, teamOne, teamTwo);
