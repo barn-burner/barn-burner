@@ -95,7 +95,8 @@ expressApp.get('/matchup/:one-:two', async (req, res) => {
     let end = req.query.end ? req.query.end : seasonEnd;
     if (req.query.allTime === '') {
         let allDates = await getAllTimeSchedule(teamOne, teamTwo);
-        let matchups = getScheduleMatchups(allDates, teamOne, teamTwo);
+        // convert the array of arrays in allDates down to one array of dates
+        let matchups = getScheduleMatchups(allDates.concat.apply([], allDates), teamOne, teamTwo);
         let metadata = getMatchupMetadata(matchups);
         res.json(metadata);
     } else {
@@ -114,14 +115,12 @@ async function getAllTimeSchedule(teamOne, teamTwo) {
         let startYear = i;
         let endYear = (i + 1);
         console.log('season: ' + `${startYear}${endYear}`);
-        let currentDates = (await getSeasonSchedule(teamOne, teamTwo, startYear, endYear));
-        // Shape the data to one giant blob of dates
-        currentDates.map((date) => {
-            allDates.push(date);
-        });
+        // Don't await, return an array of promises
+        let currentDates = getSeasonSchedule(teamOne, teamTwo, startYear, endYear);
+        allDates.push(currentDates);
     }
 
-    return allDates;
+    return await Promise.all(allDates);
 }
 
 // Returns specifc metadata about a given matchup
@@ -170,7 +169,8 @@ expressApp.get('/h2h/:one-:two', async (req, res) => {
     let end = req.query.end ? req.query.end : seasonEnd;
     if (req.query.allTime === '') {
         let allDates = await getAllTimeSchedule(teamOne, teamTwo);
-        let matchups = getScheduleMatchups(allDates, teamOne, teamTwo);
+        // convert the array of arrays in allDates down to one array of dates
+        let matchups = getScheduleMatchups(allDates.concat.apply([], allDates), teamOne, teamTwo);
         let matchupStats = getMatchupStats(matchups, teamOne, teamTwo);
         res.json(matchupStats);
     } else {
