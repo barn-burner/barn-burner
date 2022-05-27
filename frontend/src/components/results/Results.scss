@@ -1,17 +1,12 @@
 .resultsCard.ant-card {
-  background: #082455;
-  margin: 20px 0 10px 0 !important;
   .ant-card-head {
-    background: #082455;
     border-color: #082455 !important;
-    color: #fff !important;
     font-size: 40px;
     font-weight: bold;
     text-align: center;
     .ant-card-head-wrapper {
       .ant-card-head-title {
-        font-size: 28px !important;
-        padding-bottom: 0;
+        font-size: 28px;
         white-space: normal;
         word-wrap: normal;
       }
@@ -21,7 +16,6 @@
     align-items: center;
     flex-direction: column;
     justify-content: center;
-    background: #082455;
     padding-top: 0;
     img {
       width: 60%;
@@ -42,10 +36,8 @@
 
 .teamCard.ant-card {
   .ant-card-head {
-    color: #000;
     .ant-card-head-wrapper {
       .ant-card-head-title {
-        color: #fff;
         font-size: 20px !important;
       }
     }
@@ -55,7 +47,6 @@
     align-items: center;
     min-height: 160px;
     .record {
-      color: #fff;
       margin-top: 5px;
     }
   }
