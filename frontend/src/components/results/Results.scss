@@ -1,12 +1,12 @@
 .resultsCard.ant-card {
   .ant-card-head {
     border-color: #082455 !important;
-    font-size: 40px;
     font-weight: bold;
     text-align: center;
     .ant-card-head-wrapper {
       .ant-card-head-title {
-        font-size: 28px;
+        font-size: 36px;
+        padding-bottom: 0;
         white-space: normal;
         word-wrap: normal;
       }
@@ -35,6 +35,7 @@
 }
 
 .teamCard.ant-card {
+  border: 0;
   .ant-card-head {
     .ant-card-head-wrapper {
       .ant-card-head-title {
