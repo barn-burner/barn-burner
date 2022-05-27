@@ -60,7 +60,7 @@ expressApp.get('/teams', async (req, res) => {
         } else {
             teamsSorted = Object.values(formattedTeamsObj);
             // Sort alphabetically
-            teamsSorted.sort(function(a, b) {
+            teamsSorted.sort(function (a, b) {
                 let textA = a.name.toUpperCase();
                 let textB = b.name.toUpperCase();
                 return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
@@ -93,12 +93,37 @@ expressApp.get('/matchup/:one-:two', async (req, res) => {
     let teamTwo = (+req.params.two);
     let start = req.query.start ? req.query.start : seasonStart;
     let end = req.query.end ? req.query.end : seasonEnd;
-    let sharedSchedule = await getCompareSchedules(teamOne, teamTwo, start, end);
-    let matchups = getScheduleMatchups(sharedSchedule, teamOne, teamTwo);
-    let metadata = getMatchupMetadata(matchups);
+    if (req.query.allTime === '') {
+        let allDates = await getAllTimeSchedule(teamOne, teamTwo);
+        // convert the array of arrays in allDates down to one array of dates
+        console.log("All dates fetched");
+        let matchups = getScheduleMatchups(allDates.concat.apply([], allDates), teamOne, teamTwo);
+        let metadata = getMatchupMetadata(matchups);
+        res.json(metadata);
+    } else {
+        let sharedSchedule = await getCompareSchedules(teamOne, teamTwo, start, end);
+        let matchups = getScheduleMatchups(sharedSchedule, teamOne, teamTwo);
+        let metadata = getMatchupMetadata(matchups);
+        res.json(metadata);
+    }
 
-    res.json(metadata);
 });
+
+async function getAllTimeSchedule(teamOne, teamTwo) {
+    let allDates = [];
+    // The NHL officially started in 1917 and the api is most efficient by season instead of date
+    // TODO: Update 2021 to fetch current year
+    for (let i = 1917; i <= 2021; i += 1) {
+        let startYear = i;
+        let endYear = (i + 1);
+        console.log('season: ' + `${startYear}${endYear}`);
+        // Don't await, return an array of promises
+        let currentDates = getSeasonSchedule(teamOne, teamTwo, startYear, endYear);
+        allDates.push(currentDates);
+    }
+
+    return await Promise.all(allDates);
+}
 
 // Returns specifc metadata about a given matchup
 function getMatchupMetadata(matchups) {
@@ -144,12 +169,19 @@ expressApp.get('/h2h/:one-:two', async (req, res) => {
     let teamTwo = (+req.params.two);
     let start = req.query.start ? req.query.start : seasonStart;
     let end = req.query.end ? req.query.end : seasonEnd;
-    let sharedSchedule = await getCompareSchedules(teamOne, teamTwo, start, end);
-    let matchups = getScheduleMatchups(sharedSchedule, teamOne, teamTwo);
-
-    let matchupStats = getMatchupStats(matchups, teamOne, teamTwo);
-
-    res.json(matchupStats);
+    if (req.query.allTime === '') {
+        let allDates = await getAllTimeSchedule(teamOne, teamTwo);
+        console.log("All dates fetched");
+        // convert the array of arrays in allDates down to one array of dates
+        let matchups = getScheduleMatchups(allDates.concat.apply([], allDates), teamOne, teamTwo);
+        let matchupStats = getMatchupStats(matchups, teamOne, teamTwo);
+        res.json(matchupStats);
+    } else {
+        let sharedSchedule = await getCompareSchedules(teamOne, teamTwo, start, end);
+        let matchups = getScheduleMatchups(sharedSchedule, teamOne, teamTwo);
+        let matchupStats = getMatchupStats(matchups, teamOne, teamTwo);
+        res.json(matchupStats);
+    }
 });
 
 // Returns a win / loss object for a given two team matchup
@@ -252,7 +284,21 @@ async function getCompareSchedules(teamOne, teamTwo, start, end) {
         ).catch(err => handleError(err))
     );
     if (sharedSchedule) {
-        return sharedSchedule.data;
+        return sharedSchedule.data.dates;
+    } else {
+        return ({ error: 'could not fetch team data' });
+    }
+}
+
+
+async function getSeasonSchedule(teamOne, teamTwo, start, end) {
+    const sharedSchedule = (
+        await axios.get(
+            `${baseURL}/schedule?teamId=${teamOne},${teamTwo}&season=${start}${end}&gameType=R,P`
+        ).catch(err => handleError(err))
+    );
+    if (sharedSchedule) {
+        return sharedSchedule.data.dates;
     } else {
         return ({ error: 'could not fetch team data' });
     }
@@ -260,8 +306,8 @@ async function getCompareSchedules(teamOne, teamTwo, start, end) {
 
 function getScheduleMatchups(schedule, idOne, idTwo) {
     let matchups = [];
-    if (schedule.dates.length > 0) {
-        schedule.dates.map((date) => {
+    if (schedule.length > 0) {
+        schedule.map((date) => {
             date.games.map((game) => {
                 if (
                     game.teams.away.team.id === idOne &&
