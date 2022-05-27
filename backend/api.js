@@ -60,7 +60,7 @@ expressApp.get('/teams', async (req, res) => {
         } else {
             teamsSorted = Object.values(formattedTeamsObj);
             // Sort alphabetically
-            teamsSorted.sort(function(a, b) {
+            teamsSorted.sort(function (a, b) {
                 let textA = a.name.toUpperCase();
                 let textB = b.name.toUpperCase();
                 return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
@@ -144,12 +144,28 @@ expressApp.get('/h2h/:one-:two', async (req, res) => {
     let teamTwo = (+req.params.two);
     let start = req.query.start ? req.query.start : seasonStart;
     let end = req.query.end ? req.query.end : seasonEnd;
-    let sharedSchedule = await getCompareSchedules(teamOne, teamTwo, start, end);
-    let matchups = getScheduleMatchups(sharedSchedule, teamOne, teamTwo);
-
-    let matchupStats = getMatchupStats(matchups, teamOne, teamTwo);
-
-    res.json(matchupStats);
+    let allDates = [];
+    if (req.query.allTime === '') {
+        // We're only supporting salary cap era (2005-present) and the api is most efficient by season instead of date
+        for (let i = 2005; i <= 2021; i += 1) {
+            let startYear = i;
+            let endYear = (i + 1);
+            console.log("season: " + `${startYear}${endYear}`);
+            let currentDates = (await getSeasonSchedule(teamOne, teamTwo, startYear, endYear));
+            // Shape the data to one giant blob of dates
+            currentDates.map((date) => {
+                allDates.push(date);
+            });
+        }
+        let matchups = getScheduleMatchups(allDates, teamOne, teamTwo);
+        let matchupStats = getMatchupStats(matchups, teamOne, teamTwo);
+        res.json(matchupStats);
+    } else {
+        let sharedSchedule = await getCompareSchedules(teamOne, teamTwo, start, end);
+        let matchups = getScheduleMatchups(sharedSchedule, teamOne, teamTwo);
+        let matchupStats = getMatchupStats(matchups, teamOne, teamTwo);
+        res.json(matchupStats);
+    }
 });
 
 // Returns a win / loss object for a given two team matchup
@@ -252,7 +268,21 @@ async function getCompareSchedules(teamOne, teamTwo, start, end) {
         ).catch(err => handleError(err))
     );
     if (sharedSchedule) {
-        return sharedSchedule.data;
+        return sharedSchedule.data.dates;
+    } else {
+        return ({ error: 'could not fetch team data' });
+    }
+}
+
+
+async function getSeasonSchedule(teamOne, teamTwo, start, end) {
+    const sharedSchedule = (
+        await axios.get(
+            `${baseURL}/schedule?teamId=${teamOne},${teamTwo}&season=${start}${end}&gameType=R,P`
+        ).catch(err => handleError(err))
+    );
+    if (sharedSchedule) {
+        return sharedSchedule.data.dates;
     } else {
         return ({ error: 'could not fetch team data' });
     }
@@ -260,8 +290,8 @@ async function getCompareSchedules(teamOne, teamTwo, start, end) {
 
 function getScheduleMatchups(schedule, idOne, idTwo) {
     let matchups = [];
-    if (schedule.dates.length > 0) {
-        schedule.dates.map((date) => {
+    if (schedule.length > 0) {
+        schedule.map((date) => {
             date.games.map((game) => {
                 if (
                     game.teams.away.team.id === idOne &&
