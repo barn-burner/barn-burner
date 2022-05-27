@@ -26,6 +26,10 @@ const handleError = (error) => {
     }
 };
 
+// Active teams are not in order and have been moved/renamed over the years. These are the active teams by ID.
+// The API does not list this by default so we'll save an API call for now.
+const activeTeams = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 28, 29, 30, 52, 53, 54, 55];
+
 // TODO: Should these endpoints grow too large
 // They will need to be broken into individual controllers
 
@@ -60,7 +64,7 @@ expressApp.get('/teams', async (req, res) => {
         } else {
             teamsSorted = Object.values(formattedTeamsObj);
             // Sort alphabetically
-            teamsSorted.sort(function(a, b) {
+            teamsSorted.sort(function (a, b) {
                 let textA = a.name.toUpperCase();
                 let textB = b.name.toUpperCase();
                 return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
@@ -73,6 +77,20 @@ expressApp.get('/teams', async (req, res) => {
         res.json({ err: 'Failure retrieving teams' });
     }
 });
+
+expressApp.get('/validate/:id', async (req, res) => {
+    let active = teamIsActive((+req.params.id));
+    res.json(active);
+});
+
+
+function teamIsActive(id) {
+    if (activeTeams.includes(id)) {
+        return { active: true };
+    }
+
+    return { active: false };
+}
 
 function formatTeamInfo(allTeamInfo) {
     let teamInfo = {
