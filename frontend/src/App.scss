@@ -21,11 +21,15 @@ h1, h2, .ant-card-head-title, .record {
 }
 
 .ant-card {
-  background: #082455 !important;
+  background-color: #082455;
+  background-image: linear-gradient(180deg, transparent, #082490, transparent);
+    background-position: top;
+    background-repeat: no-repeat;
+    background-size: 100% 800px;
   margin: 20px 0 10px 0;
   border: 5px solid #ccc;
 }
 
 .ant-card-head {
-  background: #082455 !important;
+  background: transparent !important;
 }
