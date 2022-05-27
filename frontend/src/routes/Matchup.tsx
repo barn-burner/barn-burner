@@ -17,7 +17,7 @@ const Matchup: React.FC = () => {
   const team1 = getParams('team1');
   const team2 = getParams('team2');
 
-  async function fetchTeamData(team1ID: string, team2ID: string) {
+  async function fetchTeamData(team1ID: number, team2ID: number) {
     const res = await fetch(`https://barnburner-backend.herokuapp.com/teams?teamId=${team1ID},${team2ID}`);
 
     if(res.ok) {
@@ -30,7 +30,7 @@ const Matchup: React.FC = () => {
     setIsLoading(false);
   }
 
-  async function fetchOverallRecord(team1ID: string, team2ID: string, startDate?: string, endDate?: string) {
+  async function fetchOverallRecord(team1ID: number, team2ID: number, startDate?: string, endDate?: string) {
     const baseUrl = `https://barnburner-backend.herokuapp.com/h2h/`;
     const teamUrl = `${team1ID}-${team2ID}`;
     const dateUrl = `?start=${startDate}&end=${endDate}`;

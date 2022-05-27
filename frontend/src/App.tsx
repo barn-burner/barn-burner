@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Switch, Redirect } from 'react-router-dom';
 
 import Landing from './routes/Landing';
 import NotFound from './routes/NotFound';
@@ -16,7 +16,7 @@ const App: React.FC = () => {
         <Route exact path='/' component={ Landing }/>
         <Route path='/matchup' component={ Matchup }/>
         <Route path='/game' component={ Game }/>
-        <Route component={ NotFound } />
+        <Redirect to='/'/>
       </Switch>
     </Fragment>
   );
